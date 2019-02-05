@@ -1,5 +1,11 @@
+import argparse
 import os.path
 import pyautogui
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-c', '--command', type=str,
+                    help='command to run')
 
 def increase_font():
     pyautogui.hotkey('command', '+')
@@ -26,5 +32,14 @@ def screenshot():
         pyautogui.screenshot('screenshot.png')
 
 if __name__ == '__main__':
-    pyautogui.click()
-    screenshot()
+    args = parser.parse_args()
+    if args.command == 'increase_font':
+        increase_font()
+    elif args.command == 'decrease_font':
+        decrease_font()
+    elif args.command == 'page_up':
+        page_up()
+    elif args.command == 'page_down':
+        page_down()
+    elif args.command == 'screenshot':
+        screenshot()
