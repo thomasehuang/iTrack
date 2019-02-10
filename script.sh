@@ -1,2 +1,5 @@
 #!/bin/bash
-python commands.py
+for arg in "$@"
+do
+    python commands.py --command "$arg"
+done
