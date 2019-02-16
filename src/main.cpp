@@ -142,13 +142,13 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
     std::cout<<"left"<<std::endl;
     // runScript("pu");
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    x = 0;
+    // x = 0;
   }
   else if( leftPupil.x - x > 10 && rightPupil.x - w  > 10) {
     std::cout<<"right"<<std::endl;
     // runScript("pd");
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    x = 0;
+    // x = 0;
   }
   else if(y - leftPupil.y > 10 && z - rightPupil.y > 10) {
     std::cout<<"up"<<std::endl;
@@ -161,7 +161,7 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
 
     // runScript("pd");
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    x = 0;
+    // x = 0;
   }
   // get corner regions
   cv::Rect leftRightCornerRegion(leftEyeRegion);
