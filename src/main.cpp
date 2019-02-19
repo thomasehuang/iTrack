@@ -17,7 +17,10 @@
 #include <thread>
 #include <netdb.h>
 #include <unistd.h>
+#include <arpa/inet.h>
+
 #include <chrono>
+#define PORT 8123
 
 
 /** Constants **/
@@ -40,6 +43,46 @@ cv::Mat skinCrCbHist = cv::Mat::zeros(cv::Size(256, 256), CV_8UC1);
 
 History history(0,0,0,0);
 double x = 0;
+
+
+
+struct sockaddr_in address; 
+int sock = 0, valread; 
+struct sockaddr_in serv_addr; 
+char *hello = "Hello from client"; 
+
+
+int sendMsg(char* msg) {
+  char buffer[1024] = {0}; 
+  if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
+  { 
+      printf("\n Socket creation error \n"); 
+      return -1; 
+  } 
+
+  memset(&serv_addr, '0', sizeof(serv_addr)); 
+
+  serv_addr.sin_family = AF_INET; 
+  serv_addr.sin_port = htons(PORT); 
+     
+  // Convert IPv4 and IPv6 addresses from text to binary form 
+  if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0)  
+  { 
+      printf("\nInvalid address/ Address not supported \n"); 
+      return -1; 
+  } 
+
+  if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) 
+  { 
+      printf("\nConnection Failed \n"); 
+      return -1; 
+  } 
+  send(sock , msg , strlen(msg) , 0 ); 
+  valread = read( sock , buffer, 1024); 
+  close(sock);
+  return 0;
+}
+
 
 
 /**
@@ -200,6 +243,8 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
   if(eyes.size() == 1) {
     if(eyes[0].x < x) {
       std::cout<<"right wink"<<std::endl;
+      
+      sendMsg("pu");
     }
     else {
       std::cout<<"left wink"<<std::endl;
@@ -219,26 +264,7 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
 
   }
   else if(eyes.size() == 0) {
-    int sock;
-    struct hostent *hostnm = gethostbyname("localhost");
-    struct sockaddr_in server;
-    char buffer[12];
-
-    unsigned short port = (unsigned short) 8123;
-    if((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0){
-      exit(1);
-    }
-
-    if ( connect(sock, (struct sockaddr *)&server, sizeof(server)) < 0){
-      exit(1);
-    }
-
-    if (send(sock, buffer, sizeof(buffer),0)<0){
-      exit(1);
-    }
-
     std::cout<<"blink"<<std::endl;
-        close(sock);
 
     history.reset();
   }
