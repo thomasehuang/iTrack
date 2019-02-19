@@ -8,10 +8,15 @@
 #include <math.h>
 #include <string>
 
+#include <sys/types.h>
+#include <sys/socket.h>
 #include "constants.h"
 #include "findEyeCenter.h"
 #include "findEyeCorner.h"
+#include "history.h"
 #include <thread>
+#include <netdb.h>
+#include <unistd.h>
 #include <chrono>
 
 
@@ -24,19 +29,19 @@ void detectAndDisplay( cv::Mat frame );
 /** Global variables */
 //-- Note, either copy these two files from opencv/data/haarscascades to your current folder, or change these locations
 cv::String face_cascade_name = "../res/haarcascade_frontalface_alt.xml";
+cv::String eye_cascade_name = "../res/haarcascade_eye_tree_eyeglasses.xml";
 cv::CascadeClassifier face_cascade;
+cv::CascadeClassifier eye_cascade;
 std::string main_window_name = "Capture - Face detection";
 std::string face_window_name = "Capture - Face";
 cv::RNG rng(12345);
 cv::Mat debugImage;
 cv::Mat skinCrCbHist = cv::Mat::zeros(cv::Size(256, 256), CV_8UC1);
 
-
+History history(0,0,0,0);
 double x = 0;
-double y = 0;
 
-double w = 0;
-double z = 0;
+
 /**
  * @function main
  */
@@ -45,19 +50,14 @@ int main( int argc, const char** argv ) {
 
   // Load the cascades
   if( !face_cascade.load( face_cascade_name ) ){ printf("--(!)Error loading face cascade, please change face_cascade_name in source code.\n"); return -1; };
+  if( !eye_cascade.load( eye_cascade_name ) ){ printf("--(!)Error loading eye cascade, please change eye_cascade_name in source code.\n"); return -1; };
 
-  cv::namedWindow(main_window_name,cv::WINDOW_NORMAL);
-  cv::moveWindow(main_window_name, 400, 100);
+
   cv::namedWindow(face_window_name,cv::WINDOW_NORMAL);
   cv::moveWindow(face_window_name, 10, 100);
-  // cv::namedWindow("Right Eye",cv::WINDOW_NORMAL);
-  // cv::moveWindow("Right Eye", 10, 600);
-  // cv::namedWindow("Left Eye",cv::WINDOW_NORMAL);
-  // cv::moveWindow("Left Eye", 10, 800);
-  // cv::namedWindow("aa",cv::WINDOW_NORMAL);
-  // cv::moveWindow("aa", 10, 800);
-  // cv::namedWindow("aaa",cv::WINDOW_NORMAL);
-  // cv::moveWindow("aaa", 10, 800);
+  cv::namedWindow("Right Eye",cv::WINDOW_NORMAL);
+  cv::moveWindow("Right Eye", 10, 600);
+
 
   createCornerKernels();
   ellipse(skinCrCbHist, cv::Point(113, 155.6), cv::Size(23.4, 15.2),
@@ -131,39 +131,21 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
   //-- Find Eye Centers
   cv::Point leftPupil = findEyeCenter(faceROI,leftEyeRegion,"Left Eye");
   cv::Point rightPupil = findEyeCenter(faceROI,rightEyeRegion,"Right Eye");
-  if (x==0){
-    x = leftPupil.x;
-    y = leftPupil.y;
-    w = rightPupil.x;
-    z = rightPupil.y;
-    std::cout<<"x: "<<x<<", y: "<<y<<std::endl;
-  }
-  else if(x - leftPupil.x > 10 && w - rightPupil.x > 10) {
-    std::cout<<"left"<<std::endl;
-    // runScript("pu");
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    // x = 0;
-  }
-  else if( leftPupil.x - x > 10 && rightPupil.x - w  > 10) {
-    std::cout<<"right"<<std::endl;
-    // runScript("pd");
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    // x = 0;
-  }
-  else if(y - leftPupil.y > 10 && z - rightPupil.y > 10) {
-    std::cout<<"up"<<std::endl;
-    // runScript("pu");
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    x = 0;
-  }
-  else if( leftPupil.y -y > 8 && rightPupil.y - z > 8) {
-    std::cout<<"down"<<std::endl;
+  std::vector<cv::Rect> eyes;
+  // cv::Mat test(faces[0]);
 
-    // runScript("pd");
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    // x = 0;
-  }
-  // get corner regions
+  eye_cascade.detectMultiScale(
+              faceROI,
+              eyes,
+              1.1,
+              5,
+              0|cv::CASCADE_SCALE_IMAGE|cv::CASCADE_FIND_BIGGEST_OBJECT,
+              cv::Size(30, 30));
+
+
+
+
+
   cv::Rect leftRightCornerRegion(leftEyeRegion);
   leftRightCornerRegion.width -= leftPupil.x;
   leftRightCornerRegion.x += leftPupil.x;
@@ -215,6 +197,55 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
   }
 
   imshow(face_window_name, faceROI);
+  if(eyes.size() == 1) {
+    if(eyes[0].x < x) {
+      std::cout<<"right wink"<<std::endl;
+    }
+    else {
+      std::cout<<"left wink"<<std::endl;
+    }
+    cv::Mat image = cv::imread("../IrisDetector/screenshots/down.png");   
+    cv::resize(image, image, cv::Size(50,50));
+    // create image window named "My Image"
+    cv::namedWindow("last command", cv::WINDOW_NORMAL);
+    // cv::resizeWindow("last command",100,100);
+    // show the image on window
+    cv::imshow("last command", image);
+    // wait key for 5000 ms
+    cv::waitKey(100);
+    cv::destroyWindow("last command");
+
+        history.reset();
+
+  }
+  else if(eyes.size() == 0) {
+    int sock;
+    struct hostent *hostnm = gethostbyname("localhost");
+    struct sockaddr_in server;
+    char buffer[12];
+
+    unsigned short port = (unsigned short) 8123;
+    if((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0){
+      exit(1);
+    }
+
+    if ( connect(sock, (struct sockaddr *)&server, sizeof(server)) < 0){
+      exit(1);
+    }
+
+    if (send(sock, buffer, sizeof(buffer),0)<0){
+      exit(1);
+    }
+
+    std::cout<<"blink"<<std::endl;
+        close(sock);
+
+    history.reset();
+  }
+  else {
+  x = ( eyes[0].x + eyes[1].x ) / 2;
+  history.handleNewValue( leftPupil.x, leftPupil.y, rightPupil.x, rightPupil.y);
+}
 //  cv::Rect roi( cv::Point( 0, 0 ), faceROI.size());
 //  cv::Mat destinationROI = debugImage( roi );
 //  faceROI.copyTo( destinationROI );
@@ -260,11 +291,14 @@ void detectAndDisplay( cv::Mat frame ) {
   face_cascade.detectMultiScale( frame_gray, faces, 1.1, 2, 0|cv::CASCADE_SCALE_IMAGE|cv::CASCADE_FIND_BIGGEST_OBJECT, cv::Size(150, 150) );
 //  findSkin(debugImage);
 
+
+
   for( int i = 0; i < faces.size(); i++ )
   {
     rectangle(debugImage, faces[i], 1234);
   }
   //-- Show what you got
+
   if (faces.size() > 0) {
     findEyes(frame_gray, faces[0]);
   }

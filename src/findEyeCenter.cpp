@@ -158,6 +158,7 @@ cv::Point findEyeCenter(cv::Mat face, cv::Rect eye, std::string debugWindow) {
       double gX = Xr[x], gY = Yr[x];
       if (gX == 0.0 && gY == 0.0) {
         continue;
+
       }
       testPossibleCentersFormula(x, y, weight, gX, gY, outSum);
     }
