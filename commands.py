@@ -1,15 +1,7 @@
-import argparse
 import os.path
 import socket
 import pyautogui
 from tkinter import *
-
-
-parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--command', type=str,
-                    help='Commands to run.')
-parser.add_argument('-v', '--viz', action='store_true',
-                    help='Visualize.')
 
 """
 Commands:
@@ -70,28 +62,24 @@ def parse_commands(commands):
 
 
 if __name__ == '__main__':
+    viz = True
     socks = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     socks.bind(("localhost", 8123))
     socks.listen(5)
-
     while 1:
         client = socks.accept()[0]
         message = client.recv(1024)
-        print(message)
         client.send(str("recieved").encode("utf-8"))
-        # args = {viz: False}
-        commands = [message]
-        # if args.viz:
-        #     window = Tk()
-        #     window.title('iTrack')
-        #     w, h = 225, 50
-        #     ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
-        #     window.geometry('%ix%i+%i+%i' % (w,h,ws-w-50,hs-h-50))
-        #     window.after(3000, lambda: window.destroy())
+        commands = [message.decode('ascii')]
+        if viz:
+            window = Tk()
+            window.title('iTrack')
+            w, h = 225, 50
+            ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
+            window.geometry('%ix%i+%i+%i' % (w,h,ws-w-50,hs-h-50))
+            window.after(3000, lambda: window.destroy())
         # commands = parse_commands(args.command)
         for command in commands:
-            command = command.decode('ascii')
-            print(command)
             if command == 'mc':
                 mouse_click()
             elif command == 'if':
@@ -104,10 +92,10 @@ if __name__ == '__main__':
                 page_down()
             elif command == 'ss':
                 screenshot()
-        # if args.viz:
-        #     lbl = Label(window, text=CMD2NAME[commands[0]], font=("Arial", 30))
-        #     lbl.grid(column=0, row=0)
-        #     window.columnconfigure(0, weight=1)
-        #     window.rowconfigure(0, weight=1)
-        #     window.mainloop()
+        if viz:
+            lbl = Label(window, text=CMD2NAME[commands[0]], font=("Arial", 30))
+            lbl.grid(column=0, row=0)
+            window.columnconfigure(0, weight=1)
+            window.rowconfigure(0, weight=1)
+            window.mainloop()
         client.close()
