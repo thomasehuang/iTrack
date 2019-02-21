@@ -248,20 +248,9 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
     }
     else {
       std::cout<<"left wink"<<std::endl;
+
+      sendMsg("pd");
     }
-    cv::Mat image = cv::imread("../IrisDetector/screenshots/down.png");   
-    cv::resize(image, image, cv::Size(50,50));
-    // create image window named "My Image"
-    cv::namedWindow("last command", cv::WINDOW_NORMAL);
-    // cv::resizeWindow("last command",100,100);
-    // show the image on window
-    cv::imshow("last command", image);
-    // wait key for 5000 ms
-    cv::waitKey(100);
-    cv::destroyWindow("last command");
-
-        history.reset();
-
   }
   else if(eyes.size() == 0) {
     std::cout<<"blink"<<std::endl;
@@ -269,9 +258,9 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
     history.reset();
   }
   else {
-  x = ( eyes[0].x + eyes[1].x ) / 2;
-  history.handleNewValue( leftPupil.x, leftPupil.y, rightPupil.x, rightPupil.y);
-}
+    x = ( eyes[0].x + eyes[1].x ) / 2;
+    history.handleNewValue( leftPupil.x, leftPupil.y, rightPupil.x, rightPupil.y);
+  }
 //  cv::Rect roi( cv::Point( 0, 0 ), faceROI.size());
 //  cv::Mat destinationROI = debugImage( roi );
 //  faceROI.copyTo( destinationROI );
