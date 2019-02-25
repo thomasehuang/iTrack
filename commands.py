@@ -64,38 +64,19 @@ def parse_commands(commands):
 class Mode:
     def __init__(self, name):
         self.name = name
+        self.commands = {}
 
-    def set_left(self, func, *args):
-        self.leftf = func
-        self.lefta = args
-
-    def set_right(self, func, *args):
-        self.rightf = func
-        self.righta = args
-
-    def set_wleft(self, func, *args):
-        self.wleftf = func
-        self.wlefta = args
-
-    def set_wright(self, func, *args):
-        self.wrightf = func
-        self.wrighta = args
+    def set_command(self, movement, name, func, *args):
+        self.commands[movement] = [func, name, args]
 
     def execute(self,movement):
-        if movement == "left":
-            self.leftf(*self.lefta)
-        elif movement == "right":
-            self.rightf(*self.righta)
-        elif movement == "wright":
-            self.wrightf(*self.wrighta)
-        elif movement == "wleft":
-            self.wleftf(*self.wlefta)
+        self.commands[movement][0](*self.commands[movement][2])
 
 reader_mod = Mode("reader")
-reader_mod.set_left(pyautogui.hotkey,'command', '-')
-reader_mod.set_right(pyautogui.hotkey,'command', '+')
-reader_mod.set_wright(page_down)
-reader_mod.set_wleft(page_up)
+reader_mod.set_command("left", "Decrease Font", pyautogui.hotkey,'command', '-')
+reader_mod.set_command("right", "Increase Font", pyautogui.hotkey,'command', '+')
+reader_mod.set_command("wright", "Page Down", page_down)
+reader_mod.set_command("wleft", "Page Up", page_up)
 
 # reader_mod.execute("right")
 modes = [reader_mod]
@@ -112,20 +93,24 @@ if __name__ == '__main__':
         message = client.recv(1024)
         client.send(str("recieved").encode("utf-8"))
         commands = [message.decode('ascii')]
-        # if viz:
-        #     window = Tk()
-        #     window.title('iTrack')
-        #     w, h = 225, 50
-        #     ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
-        #     window.geometry('%ix%i+%i+%i' % (w,h,ws-w-50,hs-h-50))
-        #     window.after(3000, lambda: window.destroy())
+
         # commands = parse_commands(args.command)
         for command in commands:
-            modes[mode_pos].execute(command)
-        # if viz:
-        #     lbl = Label(window, text=CMD2NAME[commands[0]], font=("Arial", 30))
-        #     lbl.grid(column=0, row=0)
-        #     window.columnconfigure(0, weight=1)
-        #     window.rowconfigure(0, weight=1)
-        #     window.mainloop()
+            if commands[0] in modes[mode_pos].commands:
+                modes[mode_pos].execute(command)
+        if viz:
+            if commands[0] in modes[mode_pos].commands:
+                c = modes[mode_pos].commands[commands[0]][1]
+                window = Tk()
+                window.title('iTrack')
+                w, h = 225, 50
+                ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
+                window.geometry('%ix%i+%i+%i' % (w,h,ws-w-50,hs-h-50))
+                window.after(3000, lambda: window.destroy())
+                lbl = Label(window, text=c, font=("Arial", 30))
+                lbl.grid(column=0, row=0)
+                window.columnconfigure(0, weight=1)
+                window.rowconfigure(0, weight=1)
+                window.mainloop()
+
         client.close()
