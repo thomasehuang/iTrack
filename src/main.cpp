@@ -32,7 +32,8 @@ void detectAndDisplay( cv::Mat frame );
 /** Global variables */
 //-- Note, either copy these two files from opencv/data/haarscascades to your current folder, or change these locations
 cv::String face_cascade_name = "../res/haarcascade_frontalface_alt.xml";
-cv::String eye_cascade_name = "../res/haarcascade_eye_tree_eyeglasses.xml";
+// cv::String eye_cascade_name = "../res/haarcascade_eye_tree_eyeglasses.xml";
+cv::String eye_cascade_name = "../res/haarcascade_eye.xml";
 cv::CascadeClassifier face_cascade;
 cv::CascadeClassifier eye_cascade;
 std::string main_window_name = "Capture - Face detection";
@@ -181,7 +182,7 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
               faceROI,
               eyes,
               1.1,
-              5,
+              10,
               0|cv::CASCADE_SCALE_IMAGE|cv::CASCADE_FIND_BIGGEST_OBJECT,
               cv::Size(30, 30));
 
@@ -239,27 +240,58 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
     circle(faceROI, rightRightCorner, 3, 200);
   }
 
+  int res;
+
   imshow(face_window_name, faceROI);
   if(eyes.size() == 1) {
+    // one eye closed
     if(eyes[0].x < x) {
-      std::cout<<"right wink"<<std::endl;
-      
-      sendMsg("pu");
+      // std::cout<<"right wink"<<std::endl;
+      // sendMsg("pu");
+      res = history.push_back(0);
     }
     else {
-      std::cout<<"left wink"<<std::endl;
-
-      sendMsg("pd");
+      // std::cout<<"left wink"<<std::endl;
+      // sendMsg("pd");
+      res = history.push_back(1);
     }
-  }
-  else if(eyes.size() == 0) {
-    std::cout<<"blink"<<std::endl;
-
-    history.reset();
-  }
-  else {
+  } else if(eyes.size() == 0) {
+    // eyes closed
+    // std::cout<<"blink"<<std::endl;
+    // history.reset();
+    res = history.push_back(2);
+  } else {
+    // eyes open
     x = ( eyes[0].x + eyes[1].x ) / 2;
-    history.handleNewValue( leftPupil.x, leftPupil.y, rightPupil.x, rightPupil.y);
+    res = history.handleNewValue(leftPupil.x, leftPupil.y, rightPupil.x,
+      rightPupil.y);
+    // std::cout << '-1' << std::endl;
+  }
+  if (res != -1) {
+    std::cout << res << std::endl;
+  }
+  switch(res) {
+    case 0:
+      std::cout<<"right wink"<<std::endl;
+      break;
+    case 1:
+      std::cout<<"left wink"<<std::endl;
+      break;
+    case 2:
+      std::cout<<"eyes closed"<<std::endl;
+      break;
+    case 3:
+      std::cout<<"left"<<std::endl;
+      break;
+    case 4:
+      std::cout<<"right"<<std::endl;
+      break;
+    case 5:
+      std::cout<<"up"<<std::endl;
+      break;
+    case 6:
+      std::cout<<"down"<<std::endl;
+      break;
   }
 //  cv::Rect roi( cv::Point( 0, 0 ), faceROI.size());
 //  cv::Mat destinationROI = debugImage( roi );
