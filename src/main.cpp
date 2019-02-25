@@ -99,8 +99,8 @@ int main( int argc, const char** argv ) {
 
   cv::namedWindow(face_window_name,cv::WINDOW_NORMAL);
   cv::moveWindow(face_window_name, 10, 100);
-  cv::namedWindow("Right Eye",cv::WINDOW_NORMAL);
-  cv::moveWindow("Right Eye", 10, 600);
+       // cv::createTrackbar( "", "Sensitivity", &history.cutoff, 30, on_trackbar );
+      // cv::resizeWindow("Sensitivity", 450,20);
 
 
   createCornerKernels();
@@ -273,24 +273,32 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
   switch(res) {
     case 0:
       std::cout<<"right wink"<<std::endl;
+      sendMsg("wright");
       break;
     case 1:
       std::cout<<"left wink"<<std::endl;
+      sendMsg("wleft");
       break;
     case 2:
       std::cout<<"eyes closed"<<std::endl;
+      sendMsg("closed");
+      history.reset();
       break;
     case 3:
       std::cout<<"left"<<std::endl;
+      sendMsg("left");
       break;
     case 4:
       std::cout<<"right"<<std::endl;
+      sendMsg("right");
       break;
     case 5:
       std::cout<<"up"<<std::endl;
+      sendMsg("up");
       break;
     case 6:
       std::cout<<"down"<<std::endl;
+      sendMsg("down");
       break;
   }
 //  cv::Rect roi( cv::Point( 0, 0 ), faceROI.size());
