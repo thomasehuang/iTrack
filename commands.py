@@ -4,7 +4,7 @@ import pyautogui
 import threading
 import time
 from tkinter import *
-# from PIL import ImageTk, Image
+from PIL import ImageTk, Image
 
 
 """
@@ -64,25 +64,21 @@ def parse_commands(commands):
     commands = [command.strip() for command in commands]
     return commands
 
-
-def help_window():
-    window = Tk()
-    window.title('iTrack')
-
-    img = Image.open("menu.png")
-    width, height = img.size
+def help_window(window):
+    img = Image.open('menu.png')
+    w, h = img.size
     img = ImageTk.PhotoImage(img)
-    canvas = Canvas(window, width=width, height=height)
+    canvas = Canvas(window, width=w, height=h)
     canvas.pack()
     canvas.create_image(0, 0, image=img, anchor=NW)
 
     ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
-    x = ws/2 - width/2
-    y = hs/2 - height/2
+    x = ws/2 - w/2
+    y = hs/2 - h/2
 
     window.geometry("+%d+%d" % (x, y))
 
-    window.mainloop()
+    return img
 
 class Mode:
     def __init__(self, name):
@@ -114,44 +110,50 @@ reader_mod.set_command("wright", "Pause", pyautogui.hotkey,'space')
 reader_mod.set_command("wleft", "Fullscreen", pyautogui.hotkey,'f')
 
 modes = [web_mode,reader_mod, watch_mod]
-
-
 mode_pos = 0
-
 
 in_menu = False
 if __name__ == '__main__':
+    # For visualization
     viz = True
+    menu = None
+    img = None
+
     socks = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     socks.bind(("localhost", 8123))
     socks.listen(5)
-    while 1:
+    while True:
         client = socks.accept()[0]
         message = client.recv(1024)
         client.send(str("recieved").encode("utf-8"))
-        commands = [message.decode('ascii')]
+        command = message.decode('ascii')
         c = ""
-        # commands = parse_commands(args.command)
-        for command in commands:
-            if in_menu:
-                if commands[0] == 'left':
-                    mode_pos -= 1
-                    mode_pos = mode_pos % len(modes)
-                elif commands[0] == 'right':
-                    mode_pos += 1
-                    mode_pos = mode_pos % len(modes)
-                    c = "Switch Too " + modes[mode_pos].name + " Mode"
-                elif commands[0] == 'up':
-                    in_menu = False
-                    c = "Close Menu"
+        if in_menu:
+            if command == 'left':
+                mode_pos -= 1
+                mode_pos = mode_pos % len(modes)
+            elif command == 'right':
+                mode_pos += 1
+                mode_pos = mode_pos % len(modes)
+                c = "Switch Too " + modes[mode_pos].name + " Mode"
+            elif command == 'up':
+                in_menu = False
+                c = "Close Menu"
+                menu.destroy()
+                menu = None
+        elif command in modes[mode_pos].commands:
+            c = modes[mode_pos].commands[command][1]
+            modes[mode_pos].execute(command)
+        elif command == "up":
+            in_menu = True
+            c = "Open Menu"
+            menu = Tk()
+            menu.title('iTrack')
+            img = help_window(menu)
 
-            elif commands[0] in modes[mode_pos].commands:
-                c = modes[mode_pos].commands[commands[0]][1]
-                modes[mode_pos].execute(command)
-            elif commands[0] == "up":
-                in_menu = True
-                c = "Open Menu"
-                help_window()
+        if not menu is None:
+            menu.update_idletasks()
+            menu.update()
 
         if viz:
             if c != "":
