@@ -4,6 +4,28 @@ Eye tracking for accessibility.
 
 ## Installation
 
+### Installing C++ Code
+
+If not already installed this please install cmake and OpenCV
+
+To install cmake:
+```
+brew install cmake
+```
+
+Links for instructions on how to install OpenCV on OSX can be found here:
+http://charliegerard.github.io/blog/Installing-OpenCV/
+
+Once everything is installed use the following commands to generate the executable
+```
+mkdir build
+cd build
+cmake ../
+make
+```
+
+### Installing PythonCode
+
 To interface with commands on a computer, we use [PyAutoGUI](https://github.com/asweigart/pyautogui). For Mac users, type the following commands into a terminal to install PyAutoGUI:
 
 ```
