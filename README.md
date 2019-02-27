@@ -2,6 +2,12 @@
 
 Eye tracking for accessibility.
 
+## Table of Contents  
+   * [Installation](#installation)
+      * [Installing C++ Code](#installing-c-code)
+      * [Installing Python Code](#installing-python-code)
+   * [Running and Usage](#running-and-usage)
+
 ## Installation
 
 ### Installing C++ Code
