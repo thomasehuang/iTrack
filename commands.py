@@ -65,20 +65,29 @@ def parse_commands(commands):
     return commands
 
 def help_window(window, name):
-    print(name)
     img = Image.open('res/NavMode.png')
     if name == "reader":
-        print("Gg")
         img = Image.open('res/ReadMode.png')
     w, h = img.size
+    ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
+
+    if float(h) / hs > 1.0 and float(h) / hs > float(w) / ws:
+        new_h = hs
+        new_w = int(w - (h - hs) * (w / h))
+    elif float(w) / ws > 1.0 and float(w) / ws > float(h) / hs:
+        new_h = int(h - (w - ws) * (h / w))
+        new_w = ws
+    else:
+        new_w, new_h = w, h
+
+    img = img.resize((new_w, new_h))
     img = ImageTk.PhotoImage(img)
-    canvas = Canvas(window, width=w, height=h)
+    canvas = Canvas(window, width=new_w, height=new_h)
     canvas.pack()
     canvas.create_image(0, 0, image=img, anchor=NW)
 
-    ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
-    x = ws/2 - w/2
-    y = hs/2 - h/2
+    x = ws/2 - new_w/2
+    y = hs/2 - new_h/2
 
     window.geometry("+%d+%d" % (x, y))
 
