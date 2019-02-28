@@ -7,8 +7,11 @@ Eye tracking for accessibility.
       * [Installing C++ Code](#installing-c-code)
       * [Installing Python Code](#installing-python-code)
    * [Running and Usage](#running-and-usage)
+   * [Troubleshooting](#troubleshooting)
 
 ## Installation
+
+Our software currently only works on MacOS computers, so the installation instructions listed here will be for MacOS users.
 
 ### Installing C++ Code
 
@@ -31,15 +34,20 @@ make
 
 ### Installing Python Code
 
-To interface with commands on a computer, we use [PyAutoGUI](https://github.com/asweigart/pyautogui). For Mac users, type the following commands into a terminal to install PyAutoGUI:
+For this project, we use Python 3.6.
 
+(Optional) It is recommended that you create a virtual environment first (installation instructions [here](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/)). Enter the following commands to create a virtual environment and activate it:
 ```
-pip3 install pyobjc-core
-pip3 install pyobjc
-pip3 install pyautogui
+python3 -m virtualenv env
+source env/bin/activate
 ```
 
-If you get an error that says something in the lines of ```ModuleNotFoundError: No module named 'Quartz'```, please go to the accessibility tab in your privacy settings and enable permissions for your terminal.
+We will use pip to install all the necessary packages for Python. Enter the following command:
+```
+pip3 install -r requirements.txt
+```
+
+To interface with commands on a computer, we use [PyAutoGUI](https://github.com/asweigart/pyautogui). If you get an error that says something in the lines of ```ModuleNotFoundError: No module named 'Quartz'```, go to the accessibility tab in your privacy settings and enable permissions for your terminal.
 
 <!--- For Windows and Linux users, you can follow the installation instructions [here](https://pyautogui.readthedocs.io/en/latest/install.html). --->
 
@@ -73,3 +81,7 @@ Closing your eyes will recalibrate the eye center. If you think commands are tri
 Looking up opens the help menu, where you can see the current mode you are using. In the help menu, looking left or right will switch modes.
 
 All other commands are dependent on what mode you are in, and the functions of each command are described in the help menu.
+
+## Troubleshooting
+
+- We encountered some issue with Anaconda and Tkinter. Switching to Python 3 resolved the issue.
