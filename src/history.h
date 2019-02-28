@@ -20,32 +20,20 @@ public:
             righty = y2;
         }
         else if(leftx - x1 > cutoff && rightx - x2 > cutoff) {
-            // std::cout<<"left"<<std::endl;
-            // runScript("pu");
             res = push_back(3);
             std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-            // x = 0;
         }
         else if( x1 - leftx > cutoff && x2 - rightx  > cutoff) {
-            // std::cout<<"right"<<std::endl;
-            // runScript("pd");
             res = push_back(4);
             std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-            // x = 0;
         }
         else if(lefty - y1 > cutoff/2 && righty - y2 > cutoff/2) {
-            // std::cout<<"up"<<std::endl;
-            // runScript("pu");
             res = push_back(5);
             std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-            // leftx = 0;
         }
         else if( y1 - lefty > cutoff && y2 - righty > cutoff) {
-            // std::cout<<"down"<<std::endl;
-            // runScript("pd");
             res = push_back(6);
             std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-            // x = 0;
         }
         return res;
     }
@@ -68,30 +56,11 @@ public:
             }
         } else {
             cmds.push_back(cmd);
-            // std::cout<<cmd<<std::endl;
             return -1;
         }
     }
 
     int check_frames() {
-        // int topCount=0, count, topElement;
-        // for (int i=0; i<frames; i++) {
-        //     count=0;
-        //     for (int j=0 ; j<frames ; j++) {
-        //         if (cmds[i] == cmds[j]) count++;
-        //     }
-        //     if (count > topCount) {
-        //         topCount = count;
-        //         topElement = cmds[i];
-        //     }
-        // }
-        // return topElement;
-        // for (int i=0; i<frames - 1; i++) {
-        //     if (cmds[i] != cmds[i+1]) {
-        //         return -1;
-        //     }
-        // }
-        // return cmds[0];
         int count;
         for (int i=0; i<frames; i++) {
             if (cmds[i] == -1) {

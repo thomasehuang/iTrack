@@ -187,9 +187,6 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
               cv::Size(30, 30));
 
 
-
-
-
   cv::Rect leftRightCornerRegion(leftEyeRegion);
   leftRightCornerRegion.width -= leftPupil.x;
   leftRightCornerRegion.x += leftPupil.x;
@@ -246,30 +243,21 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
   if(eyes.size() == 1) {
     // one eye closed
     if(eyes[0].x < x) {
-      // std::cout<<"right wink"<<std::endl;
-      // sendMsg("pu");
       res = history.push_back(0);
     }
     else {
-      // std::cout<<"left wink"<<std::endl;
-      // sendMsg("pd");
       res = history.push_back(1);
     }
   } else if(eyes.size() == 0) {
     // eyes closed
-    // std::cout<<"blink"<<std::endl;
-    // history.reset();
     res = history.push_back(2);
   } else {
     // eyes open
     x = ( eyes[0].x + eyes[1].x ) / 2;
     res = history.handleNewValue(leftPupil.x, leftPupil.y, rightPupil.x,
       rightPupil.y);
-    // std::cout << '-1' << std::endl;
   }
-  if (res != -1) {
-    std::cout << res << std::endl;
-  }
+
   switch(res) {
     case 0:
       std::cout<<"right wink"<<std::endl;
