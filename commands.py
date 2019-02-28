@@ -64,8 +64,12 @@ def parse_commands(commands):
     commands = [command.strip() for command in commands]
     return commands
 
-def help_window(window):
-    img = Image.open('menu.png')
+def help_window(window, name):
+    print(name)
+    img = Image.open('res/NavMode.png')
+    if name == "reader":
+        print("Gg")
+        img = Image.open('res/ReadMode.png')
     w, h = img.size
     img = ImageTk.PhotoImage(img)
     canvas = Canvas(window, width=w, height=h)
@@ -109,7 +113,7 @@ reader_mod.set_command("right", "Increase Volume", pyautogui.hotkey,'shift', 'op
 reader_mod.set_command("wright", "Pause", pyautogui.hotkey,'space')
 reader_mod.set_command("wleft", "Fullscreen", pyautogui.hotkey,'f')
 
-modes = [web_mode,reader_mod, watch_mod]
+modes = [web_mode,reader_mod]
 mode_pos = 0
 
 in_menu = False
@@ -120,6 +124,7 @@ if __name__ == '__main__':
     img = None
 
     root = Tk()
+    root.withdraw()
 
     socks = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     socks.bind(("localhost", 8123))
@@ -134,10 +139,19 @@ if __name__ == '__main__':
             if command == 'left':
                 mode_pos -= 1
                 mode_pos = mode_pos % len(modes)
+                menu.destroy()
+                c = "Switch Too " + modes[mode_pos].name + " Mode"
+                menu = Toplevel(root)
+                menu.title('Help Menu')
+                img = help_window(menu, modes[mode_pos].name)
             elif command == 'right':
                 mode_pos += 1
                 mode_pos = mode_pos % len(modes)
+                menu.destroy()
                 c = "Switch Too " + modes[mode_pos].name + " Mode"
+                menu = Toplevel(root)
+                menu.title('Help Menu')
+                img = help_window(menu, modes[mode_pos].name)
             elif command == 'up':
                 in_menu = False
                 c = "Close Menu"
@@ -151,7 +165,7 @@ if __name__ == '__main__':
             c = "Open Menu"
             menu = Toplevel(root)
             menu.title('Help Menu')
-            img = help_window(menu)
+            img = help_window(menu, modes[mode_pos].name)
 
         if viz:
             if c != "":
