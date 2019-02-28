@@ -67,13 +67,15 @@ To start up front end code:
 python commands.py
 ```
 
-Once running, there are 6 main actions that will trigger events:
+After both files are running, you should be able to use your eye movements to control your computer.
+
+There are 6 main actions that will trigger events:
 1. Look left
 2. Look right
 3. Look Up
-4. Close Eyes
+4. Left Wink
 5. Right Wink
-6. Left Wink
+6. Close Eyes
 * Note: it takes approximatly 1 second for each action to be recognized, so you have to hold the action for that duration.
 
 Closing your eyes will recalibrate the eye center. If you think commands are triggering when they shouldn't be or aren't triggering when they should be, close your eyes and then look at the center of the screen.
@@ -81,6 +83,18 @@ Closing your eyes will recalibrate the eye center. If you think commands are tri
 Looking up toggles the help menu, where you can see the current mode you are using. In the help menu, looking left or right will switch modes.
 
 All other commands are dependent on what mode you are in, and the functions of each command are described in the help menu.
+
+### Modes
+
+We support modes, which allow you to have different mappings from the actions (look left, look right, left wink, right wink) to commands on the computer. By default, we support three modes: reader, watcher, and navigational. The action mappings are listed below:
+
+| | Look Left | Look Right | Left Wink | Right Wink | Notes |
+| - | - | - | - | - | - |
+| **Reader** | Decrease Font | Increase Font | Page Up | Page Down | |
+| **Watcher** | Back | Enter | Next | Previous | Works best with YouTube. |
+| **Navigational** | Decrease Volume | Increase Volume | Fullscreen | Pause | Works best with Google Chrome. |
+
+In the future, we plan to allow users to create their own modes and custom action mappings.
 
 ## Troubleshooting
 
