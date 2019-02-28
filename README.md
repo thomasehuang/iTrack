@@ -76,9 +76,9 @@ Once running, there are 6 main actions that will trigger events:
 6. Left Wink
 * Note: it takes approximatly 1 second for each action to be recognized, so you have to hold the action for that duration.
 
-Closing your eyes will recalibrate the eye center. If you think commands are triggering when they shouldn't be or aren't triggering when they should be, close your eyes and then look at the center of the screen. Closing your eyes will also close the help menu when it is open.
+Closing your eyes will recalibrate the eye center. If you think commands are triggering when they shouldn't be or aren't triggering when they should be, close your eyes and then look at the center of the screen.
 
-Looking up opens the help menu, where you can see the current mode you are using. In the help menu, looking left or right will switch modes.
+Looking up toggles the help menu, where you can see the current mode you are using. In the help menu, looking left or right will switch modes.
 
 All other commands are dependent on what mode you are in, and the functions of each command are described in the help menu.
 
