@@ -91,8 +91,8 @@ We support modes, which allow you to have different mappings from the actions (l
 | | Look Left | Look Right | Left Wink | Right Wink | Notes |
 | - | - | - | - | - | - |
 | **Reader** | Decrease Font | Increase Font | Page Up | Page Down | |
-| **Navigational** | Back | Enter | Next | Previous | Works best with YouTube. |
-| **Watcher** | Decrease Volume | Increase Volume | Fullscreen | Pause | Works best with Google Chrome. |
+| **Navigational** | Back | Enter | Next | Previous | Works best with Google Chrome. |
+| **Watcher** | Decrease Volume | Increase Volume | Fullscreen | Pause | Works best with YouTube. |
 
 In the future, we plan to allow users to create their own modes and custom action mappings.
 
