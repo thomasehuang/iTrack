@@ -119,6 +119,8 @@ if __name__ == '__main__':
     menu = None
     img = None
 
+    root = Tk()
+
     socks = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     socks.bind(("localhost", 8123))
     socks.listen(5)
@@ -147,18 +149,14 @@ if __name__ == '__main__':
         elif command == "up":
             in_menu = True
             c = "Open Menu"
-            menu = Tk()
-            menu.title('iTrack')
+            menu = Toplevel(root)
+            menu.title('Help Menu')
             img = help_window(menu)
-
-        if not menu is None:
-            menu.update_idletasks()
-            menu.update()
 
         if viz:
             if c != "":
-                window = Tk()
-                window.title('iTrack')
+                window = Toplevel(root)
+                window.title('Executed Command')
                 w, h = 225, 50
                 ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
                 window.geometry('%ix%i+%i+%i' % (w,h,ws-w-50,hs-h-50))
@@ -167,11 +165,12 @@ if __name__ == '__main__':
                 lbl.grid(column=0, row=0)
                 window.columnconfigure(0, weight=1)
                 window.rowconfigure(0, weight=1)
-                window.after(1000, lambda: window.destroy())
-                # window.destroy()
-                window.mainloop()
-                print("heere")
+                root.update_idletasks()
+                root.update()
+                time.sleep(1)
+                window.destroy()
 
-                # pyautogui.hotkey('command', 'tab')
+        root.update_idletasks()
+        root.update()
 
         client.close()

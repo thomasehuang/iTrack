@@ -52,7 +52,7 @@ int sendMsg(char* msg) {
 }
 
 int main() {
-    char* test;
+    char* test = new char[100];
     while(std::cin>>test) {
         sendMsg(test);
     }
