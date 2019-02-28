@@ -68,6 +68,8 @@ def help_window(window, name):
     img = Image.open('res/NavMode.png')
     if name == "reader":
         img = Image.open('res/ReadMode.png')
+    elif name == "watcher":
+        img = Image.open('res/WatchMode.png')
     w, h = img.size
     ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
 
@@ -117,12 +119,12 @@ web_mode.set_command("wright", "Next", pyautogui.hotkey,'tab')
 web_mode.set_command("wleft", "Previous", pyautogui.hotkey,'shift', 'tab')
 
 watch_mod = Mode("watcher")
-watch_mod.set_command("left", "Decrease Volume", pyautogui.hotkey,'shift', 'options', 'f11')
-watch_mod.set_command("right", "Increase Volume", pyautogui.hotkey,'shift', 'options', 'f12')
+watch_mod.set_command("left", "Decrease Volume", pyautogui.hotkey,'up')
+watch_mod.set_command("right", "Increase Volume", pyautogui.hotkey,'down')
 watch_mod.set_command("wright", "Pause", pyautogui.hotkey,'space')
 watch_mod.set_command("wleft", "Fullscreen", pyautogui.hotkey,'f')
 
-modes = [web_mode,reader_mod]
+modes = [web_mode,reader_mod, watch_mod]
 mode_pos = 0
 
 in_menu = False
@@ -158,6 +160,7 @@ if __name__ == '__main__':
                 c = "Switch Too " + modes[mode_pos].name + " Mode"
                 menu = Toplevel(root)
                 menu.title('Help Menu')
+                menu.attributes("-topmost", True)
                 img = help_window(menu, modes[mode_pos].name)
             elif command == 'right':
                 mode_pos += 1
@@ -166,6 +169,7 @@ if __name__ == '__main__':
                 c = "Switch Too " + modes[mode_pos].name + " Mode"
                 menu = Toplevel(root)
                 menu.title('Help Menu')
+                menu.attributes("-topmost", True)
                 img = help_window(menu, modes[mode_pos].name)
             elif command == 'up':
                 in_menu = False
