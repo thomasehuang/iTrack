@@ -83,8 +83,8 @@ public:
     double righty;
     double cutoff = 8.0;
     int waitTime = 10;
-    int frames = 10;
-    int threshold = 8;
+    int frames = 5;
+    int threshold = 4;
     char last;
     std::deque<int> cmds; 
 };
