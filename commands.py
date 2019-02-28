@@ -174,12 +174,14 @@ if __name__ == '__main__':
             c = "Open Menu"
             menu = Toplevel(root)
             menu.title('Help Menu')
+            menu.attributes("-topmost", True)
             img = help_window(menu, modes[mode_pos].name)
 
         if viz:
             if c != "":
                 window = Toplevel(root)
                 window.title('Executed Command')
+                window.attributes("-topmost", True)
                 w, h = 225, 50
                 ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
                 window.geometry('%ix%i+%i+%i' % (w,h,ws-w-50,hs-h-50))
