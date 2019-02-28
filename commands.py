@@ -5,7 +5,7 @@ import threading
 import time
 from tkinter import *
 from PIL import ImageTk, Image
-
+from AppKit import NSSound
 
 """
 Commands:
@@ -117,10 +117,10 @@ web_mode.set_command("wright", "Next", pyautogui.hotkey,'tab')
 web_mode.set_command("wleft", "Previous", pyautogui.hotkey,'shift', 'tab')
 
 watch_mod = Mode("watcher")
-reader_mod.set_command("left", "Decrease Volume", pyautogui.hotkey,'shift', 'options', 'f11')
-reader_mod.set_command("right", "Increase Volume", pyautogui.hotkey,'shift', 'options', 'f12')
-reader_mod.set_command("wright", "Pause", pyautogui.hotkey,'space')
-reader_mod.set_command("wleft", "Fullscreen", pyautogui.hotkey,'f')
+watch_mod.set_command("left", "Decrease Volume", pyautogui.hotkey,'shift', 'options', 'f11')
+watch_mod.set_command("right", "Increase Volume", pyautogui.hotkey,'shift', 'options', 'f12')
+watch_mod.set_command("wright", "Pause", pyautogui.hotkey,'space')
+watch_mod.set_command("wleft", "Fullscreen", pyautogui.hotkey,'f')
 
 modes = [web_mode,reader_mod]
 mode_pos = 0
@@ -143,6 +143,12 @@ if __name__ == '__main__':
         message = client.recv(1024)
         client.send(str("recieved").encode("utf-8"))
         command = message.decode('ascii')
+        sound = NSSound.alloc()
+
+        sound.initWithContentsOfFile_byReference_('/System/Library/Sounds/Ping.aiff', True)
+        #rewind and play whenever you need it:
+        sound.stop() #rewind
+        sound.play()
         c = ""
         if in_menu:
             if command == 'left':
