@@ -84,7 +84,8 @@ int sendMsg(char* msg) {
   return 0;
 }
 
-
+void on_trackbar( int, void* ) {
+}
 
 /**
  * @function main
@@ -99,8 +100,10 @@ int main( int argc, const char** argv ) {
 
   cv::namedWindow(face_window_name,cv::WINDOW_NORMAL);
   cv::moveWindow(face_window_name, 10, 100);
-       // cv::createTrackbar( "", "Sensitivity", &history.cutoff, 30, on_trackbar );
-      // cv::resizeWindow("Sensitivity", 450,20);
+  cv::namedWindow("Sensitivity",cv::WINDOW_NORMAL);
+
+  cv::createTrackbar( "", "Sensitivity", &history.cutoff, 30, on_trackbar );
+  cv::resizeWindow("Sensitivity", 400,400);
 
 
   createCornerKernels();
@@ -289,6 +292,7 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
       sendMsg("down");
       break;
   }
+  cv::waitKey(10);
 //  cv::Rect roi( cv::Point( 0, 0 ), faceROI.size());
 //  cv::Mat destinationROI = debugImage( roi );
 //  faceROI.copyTo( destinationROI );

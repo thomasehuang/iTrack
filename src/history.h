@@ -46,10 +46,14 @@ public:
     int push_back(int cmd) {
         if (cmds.size() == frames) {
             int res = check_frames();
-            if (res != -1) {
+            if (res != -1 && res != prevCommand) {
                 cmds.clear();
+                prevCommand = res;
                 return res;
             } else {
+                if (res == -1) {
+                    prevCommand = res;
+                }
                 cmds.pop_front();
                 cmds.push_back(cmd);
                 return -1;
@@ -81,10 +85,11 @@ public:
     double lefty;
     double rightx;
     double righty;
-    double cutoff = 8.0;
+    int cutoff = 8.0;
     int waitTime = 10;
     int frames = 5;
     int threshold = 4;
+    int prevCommand = -1;
     char last;
     std::deque<int> cmds; 
 };
