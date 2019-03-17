@@ -1,4 +1,5 @@
-import os.path
+import os
+# import os.path
 import socket
 import pyautogui
 import threading
@@ -64,6 +65,9 @@ def parse_commands(commands):
     commands = [command.strip() for command in commands]
     return commands
 
+def goto_url(url):
+    os.system("open -a \"Google Chrome\" " + url)
+
 def help_window(window, name):
     img = Image.open('res/NavMode.png')
     if name == "reader":
@@ -124,7 +128,13 @@ watch_mod.set_command("right", "Increase Volume", pyautogui.hotkey,'down')
 watch_mod.set_command("wright", "Pause", pyautogui.hotkey,'space')
 watch_mod.set_command("wleft", "Fullscreen", pyautogui.hotkey,'f')
 
-modes = [web_mode,reader_mod, watch_mod]
+url_mode = Mode("url")
+url_mode.set_command("left", "Goto webkinz", goto_url,'https://www.webkinz.com/')
+url_mode.set_command("right", "Goto Google", goto_url,'https://www.google.com')
+url_mode.set_command("wright", "Goto NYTimes", goto_url,'https://www.nytimes.com/')
+url_mode.set_command("wleft", "Goto Youtube", goto_url,'https://www.youtube.com/')
+
+modes = [url_mode, web_mode,reader_mod, watch_mod]
 mode_pos = 0
 
 in_menu = False
