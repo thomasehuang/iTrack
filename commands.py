@@ -74,6 +74,8 @@ def help_window(window, name):
         img = Image.open('res/ReadMode.png')
     elif name == "watcher":
         img = Image.open('res/WatchMode.png')
+    elif name == "url":
+        img = Image.open('res/UrlMode.png')
     w, h = img.size
     ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
 
@@ -129,10 +131,10 @@ watch_mod.set_command("wright", "Pause", pyautogui.hotkey,'space')
 watch_mod.set_command("wleft", "Fullscreen", pyautogui.hotkey,'f')
 
 url_mode = Mode("url")
-url_mode.set_command("left", "Goto webkinz", goto_url,'https://www.webkinz.com/')
-url_mode.set_command("right", "Goto Google", goto_url,'https://www.google.com')
-url_mode.set_command("wright", "Goto NYTimes", goto_url,'https://www.nytimes.com/')
-url_mode.set_command("wleft", "Goto Youtube", goto_url,'https://www.youtube.com/')
+url_mode.set_command("left", "Open webkinz", goto_url,'https://www.webkinz.com/')
+url_mode.set_command("right", "Open Google", goto_url,'https://www.google.com')
+url_mode.set_command("wright", "Open NY Times", goto_url,'https://www.nytimes.com/')
+url_mode.set_command("wleft", "Open Youtube", goto_url,'https://www.youtube.com/')
 
 modes = [url_mode, web_mode,reader_mod, watch_mod]
 mode_pos = 0
