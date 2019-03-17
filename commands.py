@@ -133,6 +133,7 @@ if __name__ == '__main__':
     viz = True
     menu = None
     img = None
+    pause = False
 
     root = Tk()
     root.withdraw()
@@ -154,6 +155,8 @@ if __name__ == '__main__':
         c = ""
         if in_menu:
             if command == 'left':
+                if pause:
+                    continue
                 mode_pos -= 1
                 mode_pos = mode_pos % len(modes)
                 menu.destroy()
@@ -163,6 +166,8 @@ if __name__ == '__main__':
                 menu.attributes("-topmost", True)
                 img = help_window(menu, modes[mode_pos].name)
             elif command == 'right':
+                if pause:
+                    continue
                 mode_pos += 1
                 mode_pos = mode_pos % len(modes)
                 menu.destroy()
@@ -176,7 +181,13 @@ if __name__ == '__main__':
                 c = "Close Menu"
                 menu.destroy()
                 menu = None
+            elif command == 'wleft':
+                pause = True
+            elif command == 'wright':
+                pause = False
         elif command in modes[mode_pos].commands:
+            if pause:
+                continue
             c = modes[mode_pos].commands[command][1]
             modes[mode_pos].execute(command)
         elif command == "up":
