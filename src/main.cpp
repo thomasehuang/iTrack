@@ -103,7 +103,7 @@ int main( int argc, const char** argv ) {
   cv::namedWindow("Sensitivity",cv::WINDOW_NORMAL);
 
   cv::createTrackbar( "", "Sensitivity", &history.cutoff, 30, on_trackbar );
-  cv::resizeWindow("Sensitivity", 400,400);
+  cv::resizeWindow("Sensitivity", 400,50);
 
 
   createCornerKernels();
@@ -347,6 +347,14 @@ void detectAndDisplay( cv::Mat frame ) {
   //-- Show what you got
 
   if (faces.size() > 0) {
+    auto max = faces[0].width;
+    int pos = 0;
+    for(int i = 1; i < faces.size(); i++){
+      if(faces[i].width > max){
+        max = faces[i].width;
+        pos = i;
+      }
+    }
     findEyes(frame_gray, faces[0]);
   }
 }

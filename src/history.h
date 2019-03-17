@@ -19,19 +19,19 @@ public:
             rightx = x2;
             righty = y2;
         }
-        else if(leftx - x1 > cutoff && rightx - x2 > cutoff) {
+        else if(leftx - x1 > 30 - cutoff && rightx - x2 > 30 - cutoff) {
             res = push_back(3);
             std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
         }
-        else if( x1 - leftx > cutoff && x2 - rightx  > cutoff) {
+        else if( x1 - leftx > 30 - cutoff && x2 - rightx  > 30 - cutoff) {
             res = push_back(4);
             std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
         }
-        else if(lefty - y1 > cutoff/2 && righty - y2 > cutoff/2) {
+        else if(lefty - y1 > (30 - cutoff)/2 && righty - y2 > (30 - cutoff)/2) {
             res = push_back(5);
             std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
         }
-        else if( y1 - lefty > cutoff && y2 - righty > cutoff) {
+        else if( y1 - lefty > 30 - cutoff && y2 - righty > 30 - cutoff) {
             res = push_back(6);
             std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
         }
@@ -85,7 +85,7 @@ public:
     double lefty;
     double rightx;
     double righty;
-    int cutoff = 8.0;
+    int cutoff = 22.0;
     int waitTime = 10;
     int frames = 5;
     int threshold = 4;
