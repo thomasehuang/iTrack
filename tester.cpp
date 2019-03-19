@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include <thread>
 #include <iostream>
 #include <queue>
 #include <stdio.h>
@@ -53,6 +54,66 @@ int sendMsg(char* msg) {
 
 int main() {
     char* test = new char[100];
+    sendMsg("wright");
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    sendMsg("up");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+
+    sendMsg("right");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    sendMsg("up");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    sendMsg("wright");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    sendMsg("wright");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    sendMsg("wright");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    sendMsg("wright");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    sendMsg("right");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    sendMsg("wright");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    sendMsg("right");
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+
+        sendMsg("up");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+
+    sendMsg("right");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    sendMsg("up");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    sendMsg("wright");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        sendMsg("wright");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        sendMsg("wright");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    // sendMsg();
+    // sendMsg();
+    // sendMsg();
+    // sendMsg();
+    // sendMsg();
+    // sendMsg();
+    // sendMsg();
+    // sendMsg();
+    // sendMsg();
+    // sendMsg();
+    // sendMsg();
     while(std::cin>>test) {
         sendMsg(test);
     }
