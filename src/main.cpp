@@ -304,28 +304,28 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
     }
   }
   else if (sensitivityCalibration == 1) {
-    std::cout<<"Welcome to an interactive sensitivity set up. To continue close and reopen your eyes (eyes should be closed for 2-3 seconds)."<<std::endl;
+    sendMsg("print Welcome to an interactive sensitivity set up. To continue close and reopen your eyes (eyes should be closed for 2-3 seconds).");
     sensitivityCalibration += 1;
   }
   else if (sensitivityCalibration == 2) {
     if(res == 2) {
+      sendMsg("print Close your eyes and upon opening them look to the right.");
       sensitivityCalibration += 1;
     }
   }
   else if (sensitivityCalibration == 3){
     if(eyes.size() == 2) {
-      std::cout<<"Close your eyes and upon openning them look to the right."<<std::endl;
       sensitivityCalibration += 1;
     }
   }
   else if (sensitivityCalibration == 4) {
     if(res == 2) {
+      sendMsg("print Awsome! Now do the same action but looking to the left now.");
       sensitivityCalibration += 1;
     }
   }
   else if (sensitivityCalibration == 5){
     if(eyes.size() == 2) {
-      std::cout<<"Awsome! Now do the same action but looking to the left now."<<std::endl;
       sensitivityValueLeft = leftPupil.x;
       sensitivityValueRight = rightPupil.x;
       sensitivityValueUp = ( leftPupil.y + rightPupil.y ) / 2;
@@ -334,12 +334,12 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
   }
   else if (sensitivityCalibration == 6) {
     if(res == 2) {
+      sendMsg("print Do the same action one last time looking up.");
       sensitivityCalibration += 1;
     }
   }
   else if (sensitivityCalibration == 7){
     if(eyes.size() == 2) {
-      std::cout<<"Do the same action one last time looking up."<<std::endl;
       sensitivityValueLeft -= leftPupil.x;
       sensitivityValueRight -= rightPupil.x;
       sensitivityValueUp += ( leftPupil.y + rightPupil.y ) / 2;
@@ -351,17 +351,18 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
   }
   else if (sensitivityCalibration == 8) {
     if(res == 2) {
+      sendMsg("print You're all done!");
       sensitivityCalibration += 1;
     }
   }
   else if (sensitivityCalibration == 9){
     if(eyes.size() == 2) {
-      std::cout<<"You're all done!"<<std::endl;
       sensitivityCalibration +=1;
     }
 
   }
   else if (sensitivityCalibration == 10){
+    sendMsg("print~");
     sensitivityValueUp =( ( leftPupil.y + rightPupil.y ) / 2) - sensitivityValueUp;
     history.cutoff = 30.0 - (.6*((sensitivityValueLeft + sensitivityValueRight)/2));
     std::cout<<history.cutoff<<std::endl;

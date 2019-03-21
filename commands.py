@@ -146,6 +146,7 @@ if __name__ == '__main__':
     menu = None
     img = None
     pause = False
+    setup_window = None
 
     root = Tk()
     root.withdraw()
@@ -214,6 +215,28 @@ if __name__ == '__main__':
             menu.title('Help Menu')
             menu.attributes("-topmost", True)
             img = help_window(menu, modes[mode_pos].name)
+        elif command[:5] == "print":
+            if setup_window:
+                setup_window.destroy()
+            setup_window = Toplevel(root)
+            setup_window.title('Setup Window')
+            setup_window.attributes("-topmost", True)
+            w, h = 800, 300
+            ws, hs = setup_window.winfo_screenwidth(), setup_window.winfo_screenheight()
+            setup_window.geometry('%ix%i+%i+%i' % (w,h,ws//2 - w//2,hs//2 - h//2))
+
+            lbl = Label(setup_window, text=command[6:], font=("Arial", 30), wraplength=750)
+            lbl.grid(column=0, row=0)
+            setup_window.columnconfigure(0, weight=1)
+            setup_window.rowconfigure(0, weight=1)
+            root.update_idletasks()
+            root.update()
+            if command[5:] == "~":
+                print("here")
+                setup_window.destroy()
+                setup_window = None
+
+
 
         if viz:
             if c != "":
