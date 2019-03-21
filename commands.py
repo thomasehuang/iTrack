@@ -131,8 +131,8 @@ watch_mod.set_command("wright", "Pause", pyautogui.hotkey,'space')
 watch_mod.set_command("wleft", "Fullscreen", pyautogui.hotkey,'f')
 
 url_mode = Mode("url")
-url_mode.set_command("left", "Open webkinz", goto_url,'https://www.webkinz.com/')
-url_mode.set_command("right", "Open Google", goto_url,'https://www.google.com')
+url_mode.set_command("left", "Open webkinz", goto_url,'https://www.gmail.com/')
+url_mode.set_command("right", "Open Google", goto_url,'https://www.reddit.com/')
 url_mode.set_command("wright", "Open NY Times", goto_url,'https://www.nytimes.com/')
 url_mode.set_command("wleft", "Open Youtube", goto_url,'https://www.youtube.com/')
 
@@ -168,40 +168,45 @@ if __name__ == '__main__':
         if in_menu:
             if command == 'left':
                 if pause:
-                    continue
-                mode_pos -= 1
-                mode_pos = mode_pos % len(modes)
-                menu.destroy()
-                c = "Switch Too " + modes[mode_pos].name + " Mode"
-                menu = Toplevel(root)
-                menu.title('Help Menu')
-                menu.attributes("-topmost", True)
-                img = help_window(menu, modes[mode_pos].name)
+                    c = 'Locked'
+                else:
+                    mode_pos -= 1
+                    mode_pos = mode_pos % len(modes)
+                    menu.destroy()
+                    c = "Switch To " + modes[mode_pos].name + " Mode"
+                    menu = Toplevel(root)
+                    menu.title('Help Menu')
+                    menu.attributes("-topmost", True)
+                    img = help_window(menu, modes[mode_pos].name)
             elif command == 'right':
                 if pause:
-                    continue
-                mode_pos += 1
-                mode_pos = mode_pos % len(modes)
-                menu.destroy()
-                c = "Switch Too " + modes[mode_pos].name + " Mode"
-                menu = Toplevel(root)
-                menu.title('Help Menu')
-                menu.attributes("-topmost", True)
-                img = help_window(menu, modes[mode_pos].name)
+                    c = 'Locked'
+                else:
+                    mode_pos += 1
+                    mode_pos = mode_pos % len(modes)
+                    menu.destroy()
+                    c = "Switch To " + modes[mode_pos].name + " Mode"
+                    menu = Toplevel(root)
+                    menu.title('Help Menu')
+                    menu.attributes("-topmost", True)
+                    img = help_window(menu, modes[mode_pos].name)
             elif command == 'up':
                 in_menu = False
                 c = "Close Menu"
                 menu.destroy()
                 menu = None
             elif command == 'wleft':
-                pause = True
-            elif command == 'wright':
-                pause = False
+                pause = not pause
+                if pause:
+                    c = "Lock"
+                else:
+                    c = "Unlock"
         elif command in modes[mode_pos].commands:
             if pause:
-                continue
-            c = modes[mode_pos].commands[command][1]
-            modes[mode_pos].execute(command)
+                c = 'Locked'
+            else:
+                c = modes[mode_pos].commands[command][1]
+                modes[mode_pos].execute(command)
         elif command == "up":
             in_menu = True
             c = "Open Menu"
@@ -215,7 +220,7 @@ if __name__ == '__main__':
                 window = Toplevel(root)
                 window.title('Executed Command')
                 window.attributes("-topmost", True)
-                w, h = 225, 50
+                w, h = 400, 50
                 ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
                 window.geometry('%ix%i+%i+%i' % (w,h,ws-w-50,hs-h-50))
 
