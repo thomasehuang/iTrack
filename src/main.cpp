@@ -25,6 +25,11 @@
 
 /** Constants **/
 
+int sensitivityCalibration = 0;
+double sensitivityValueLeft = 0;
+double sensitivityValueRight = 0;
+double sensitivityValueUp = 0;
+
 
 /** Function Headers */
 void detectAndDisplay( cv::Mat frame );
@@ -91,6 +96,9 @@ void on_trackbar( int, void* ) {
  * @function main
  */
 int main( int argc, const char** argv ) {
+  if(argc > 1) {
+    sensitivityCalibration = 1;
+  }
   cv::Mat frame;
 
   // Load the cascades
@@ -100,10 +108,10 @@ int main( int argc, const char** argv ) {
 
   cv::namedWindow(face_window_name,cv::WINDOW_NORMAL);
   cv::moveWindow(face_window_name, 10, 100);
-  cv::namedWindow("Sensitivity",cv::WINDOW_NORMAL);
+  // cv::namedWindow("Sensitivity",cv::WINDOW_NORMAL);
 
-  cv::createTrackbar( "", "Sensitivity", &history.cutoff, 30, on_trackbar );
-  cv::resizeWindow("Sensitivity", 400,50);
+  // cv::createTrackbar( "", "Sensitivity", &history.cutoff, 30, on_trackbar );
+  // cv::resizeWindow("Sensitivity", 400,50);
 
 
   createCornerKernels();
@@ -259,40 +267,110 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
     x = ( eyes[0].x + eyes[1].x ) / 2;
     res = history.handleNewValue(leftPupil.x, leftPupil.y, rightPupil.x,
       rightPupil.y);
+
   }
 
-  switch(res) {
-    case 0:
-      std::cout<<"right wink"<<std::endl;
-      sendMsg("wright");
-      break;
-    case 1:
-      std::cout<<"left wink"<<std::endl;
-      sendMsg("wleft");
-      break;
-    case 2:
-      std::cout<<"eyes closed"<<std::endl;
-      sendMsg("closed");
-      history.reset();
-      break;
-    case 3:
-      std::cout<<"left"<<std::endl;
-      sendMsg("left");
-      break;
-    case 4:
-      std::cout<<"right"<<std::endl;
-      sendMsg("right");
-      break;
-    case 5:
-      std::cout<<"up"<<std::endl;
-      sendMsg("up");
-      break;
-    case 6:
-      std::cout<<"down"<<std::endl;
-      sendMsg("down");
-      break;
+  if (sensitivityCalibration == 0) {
+    switch(res) {
+      case 0:
+        std::cout<<"right wink"<<std::endl;
+        sendMsg("wright");
+        break;
+      case 1:
+        std::cout<<"left wink"<<std::endl;
+        sendMsg("wleft");
+        break;
+      case 2:
+        std::cout<<"eyes closed"<<std::endl;
+        sendMsg("closed");
+        history.reset();
+        break;
+      case 3:
+        std::cout<<"left"<<std::endl;
+        sendMsg("left");
+        break;
+      case 4:
+        std::cout<<"right"<<std::endl;
+        sendMsg("right");
+        break;
+      case 5:
+        std::cout<<"up"<<std::endl;
+        sendMsg("up");
+        break;
+      case 6:
+        std::cout<<"down"<<std::endl;
+        sendMsg("down");
+        break;
+    }
   }
-  cv::waitKey(10);
+  else if (sensitivityCalibration == 1) {
+    std::cout<<"Welcome to an interactive sensitivity set up. To continue close and reopen your eyes (eyes should be closed for 2-3 seconds)."<<std::endl;
+    sensitivityCalibration += 1;
+  }
+  else if (sensitivityCalibration == 2) {
+    if(res == 2) {
+      sensitivityCalibration += 1;
+    }
+  }
+  else if (sensitivityCalibration == 3){
+    if(eyes.size() == 2) {
+      std::cout<<"Close your eyes and upon openning them look to the right."<<std::endl;
+      sensitivityCalibration += 1;
+    }
+  }
+  else if (sensitivityCalibration == 4) {
+    if(res == 2) {
+      sensitivityCalibration += 1;
+    }
+  }
+  else if (sensitivityCalibration == 5){
+    if(eyes.size() == 2) {
+      std::cout<<"Awsome! Now do the same action but looking to the left now."<<std::endl;
+      sensitivityValueLeft = leftPupil.x;
+      sensitivityValueRight = rightPupil.x;
+      sensitivityValueUp = ( leftPupil.y + rightPupil.y ) / 2;
+      sensitivityCalibration += 1;
+    }
+  }
+  else if (sensitivityCalibration == 6) {
+    if(res == 2) {
+      sensitivityCalibration += 1;
+    }
+  }
+  else if (sensitivityCalibration == 7){
+    if(eyes.size() == 2) {
+      std::cout<<"Do the same action one last time looking up."<<std::endl;
+      sensitivityValueLeft -= leftPupil.x;
+      sensitivityValueRight -= rightPupil.x;
+      sensitivityValueUp += ( leftPupil.y + rightPupil.y ) / 2;
+      sensitivityValueLeft = sensitivityValueLeft/2;
+      sensitivityValueRight = sensitivityValueRight/2;
+      sensitivityValueUp = sensitivityValueUp/2;
+      sensitivityCalibration += 1;
+    }
+  }
+  else if (sensitivityCalibration == 8) {
+    if(res == 2) {
+      sensitivityCalibration += 1;
+    }
+  }
+  else if (sensitivityCalibration == 9){
+    if(eyes.size() == 2) {
+      std::cout<<"You're all done!"<<std::endl;
+      sensitivityCalibration +=1;
+    }
+
+  }
+  else if (sensitivityCalibration == 10){
+    sensitivityValueUp =( ( leftPupil.y + rightPupil.y ) / 2) - sensitivityValueUp;
+    history.cutoff = 30.0 - (.6*((sensitivityValueLeft + sensitivityValueRight)/2));
+    std::cout<<history.cutoff<<std::endl;
+    sensitivityCalibration = 0;
+  }
+
+
+
+  // cv::waitKey(10);
 //  cv::Rect roi( cv::Point( 0, 0 ), faceROI.size());
 //  cv::Mat destinationROI = debugImage( roi );
 //  faceROI.copyTo( destinationROI );
