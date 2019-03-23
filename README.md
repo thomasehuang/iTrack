@@ -80,7 +80,7 @@ There are 6 main actions that will trigger events:
 
 Closing your eyes will recalibrate the eye center. If you think commands are triggering when they shouldn't be or aren't triggering when they should be, close your eyes and then look at the center of the screen.
 
-Looking up toggles the help menu, where you can see the current mode you are using. In the help menu, looking left or right will switch modes.
+Looking up toggles the help menu, where you can see the current mode you are using. In the help menu, looking left or right will switch modes. Winking with your left eye will lock or unlock the system. When the system is locked, no commands will be triggered with any eye movement.
 
 All other commands are dependent on what mode you are in, and the functions of each command are described in the help menu.
 
@@ -93,6 +93,7 @@ We support modes, which allow you to have different mappings from the actions (l
 | **Reader** | Decrease Font | Increase Font | Page Up | Page Down | |
 | **Navigational** | Back | Enter | Next | Previous | Works best with Google Chrome. |
 | **Watcher** | Decrease Volume | Increase Volume | Fullscreen | Pause | Works best with YouTube. |
+| **URL** | Open Reddit | Open Gmail | Open Youtube | Open NY Times | |
 
 In the future, we plan to allow users to create their own modes and custom action mappings.
 
