@@ -136,8 +136,8 @@ watch_mod.set_command("wright", "Pause", pyautogui.hotkey,'space')
 watch_mod.set_command("wleft", "Fullscreen", pyautogui.hotkey,'f')
 
 url_mode = Mode("url")
-url_mode.set_command("left", "Open webkinz", goto_url,'https://www.gmail.com/')
-url_mode.set_command("right", "Open Google", goto_url,'https://www.reddit.com/')
+url_mode.set_command("left", "Open Gmail", goto_url,'https://www.gmail.com/')
+url_mode.set_command("right", "Open Reddit", goto_url,'https://www.reddit.com/')
 url_mode.set_command("wright", "Open NY Times", goto_url,'https://www.nytimes.com/')
 url_mode.set_command("wleft", "Open Youtube", goto_url,'https://www.youtube.com/')
 
