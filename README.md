@@ -2,6 +2,14 @@
 
 Eye tracking for accessibility.
 
+## Demo Videos
+
+[Setup Tutorial](https://drive.google.com/open?id=1EwiEe1INtsU5r0KwHCujp7-T_bhfWiim)
+
+[Walkthrough Tutorial](https://drive.google.com/open?id=1CjY-SZ2-PhIgjgNnKxEUALwUfRLTiOza)
+
+[Usage Demo (no talking)](https://drive.google.com/open?id=1sY4h3UH0sLCuZa52cP-AxpiEmb73R2iX)
+
 ## Table of Contents  
    * [Installation](#installation)
       * [Installing C++ Code](#installing-c-code)
