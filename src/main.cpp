@@ -25,7 +25,7 @@
 
 /** Constants **/
 
-int sensitivityCalibration = 0;
+int sensitivityCalibration = 11;
 double sensitivityValueLeft = 0;
 double sensitivityValueRight = 0;
 double sensitivityValueUp = 0;
@@ -251,6 +251,10 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
   int res;
 
   imshow(face_window_name, faceROI);
+  // rightPupil.x += face.x;
+  // leftPupil.x += face.x;
+  // rightPupil.y += face.y;
+  // leftPupil.y += face.y;
   if(eyes.size() == 1) {
     // one eye closed
     if(eyes[0].x < x) {
@@ -334,12 +338,13 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
   }
   else if (sensitivityCalibration == 6) {
     if(res == 2) {
-      sendMsg("print Do the same action one last time looking up.");
+      sendMsg("print Do the same action one last time looking at the center of the screen. This action will act as a way to recalibrate the center of your eyes if things ever stop working.");
       sensitivityCalibration += 1;
     }
   }
   else if (sensitivityCalibration == 7){
     if(eyes.size() == 2) {
+      history.reset();
       sensitivityValueLeft -= leftPupil.x;
       sensitivityValueRight -= rightPupil.x;
       sensitivityValueUp += ( leftPupil.y + rightPupil.y ) / 2;
@@ -362,12 +367,17 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
 
   }
   else if (sensitivityCalibration == 10){
-    sendMsg("print~");
     sensitivityValueUp =( ( leftPupil.y + rightPupil.y ) / 2) - sensitivityValueUp;
     history.cutoff = 30.0 - (.6*((sensitivityValueLeft + sensitivityValueRight)/2));
     std::cout<<history.cutoff<<std::endl;
+    sensitivityCalibration += 1;
+  }
+  else if(sensitivityCalibration == 11){
+
+    sendMsg("print Try looking up to pull up the help window.");
     sensitivityCalibration = 0;
   }
+
 
 
 

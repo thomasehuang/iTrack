@@ -88,7 +88,7 @@ def help_window(window, name):
     else:
         new_w, new_h = w, h
 
-    percent = 0.8
+    percent = 1
     if percent < 1:
         new_h = int(new_h * percent)
         new_w = int(new_w * percent)
@@ -220,6 +220,10 @@ if __name__ == '__main__':
             menu.title('Help Menu')
             menu.attributes("-topmost", True)
             img = help_window(menu, modes[mode_pos].name)
+            if setup_window != None:
+                setup_window.destroy()
+                setup_window = None
+
         elif command[:5] == "print":
             if setup_window:
                 setup_window.destroy()
@@ -237,7 +241,6 @@ if __name__ == '__main__':
             root.update_idletasks()
             root.update()
             if command[5:] == "~":
-                print("here")
                 setup_window.destroy()
                 setup_window = None
 

@@ -85,7 +85,7 @@ public:
     double lefty;
     double rightx;
     double righty;
-    int cutoff = 22.0;
+    int cutoff = 24.0;
     int waitTime = 10;
     int frames = 5;
     int threshold = 4;
