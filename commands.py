@@ -151,6 +151,7 @@ if __name__ == '__main__':
     menu = None
     img = None
     pause = False
+    setup = False
     setup_window = None
 
     root = Tk()
@@ -172,6 +173,8 @@ if __name__ == '__main__':
         sound.play()
         c = ""
         if in_menu:
+            if setup:
+                continue
             if command == 'left':
                 if pause:
                     c = 'Locked'
@@ -208,7 +211,9 @@ if __name__ == '__main__':
                 else:
                     c = "Unlock"
         elif command in modes[mode_pos].commands:
-            if pause:
+            if setup:
+                continue
+            elif pause:
                 c = 'Locked'
             else:
                 c = modes[mode_pos].commands[command][1]
@@ -223,6 +228,7 @@ if __name__ == '__main__':
             if setup_window != None:
                 setup_window.destroy()
                 setup_window = None
+                setup = False
 
         elif command[:5] == "print":
             if setup_window:
@@ -243,6 +249,7 @@ if __name__ == '__main__':
             if command[5:] == "~":
                 setup_window.destroy()
                 setup_window = None
+            setup = True
 
 
 
