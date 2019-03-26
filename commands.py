@@ -88,7 +88,7 @@ def help_window(window, name):
     else:
         new_w, new_h = w, h
 
-    percent = 1
+    percent = .6
     if percent < 1:
         new_h = int(new_h * percent)
         new_w = int(new_w * percent)

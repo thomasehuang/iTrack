@@ -106,8 +106,8 @@ int main( int argc, const char** argv ) {
   if( !eye_cascade.load( eye_cascade_name ) ){ printf("--(!)Error loading eye cascade, please change eye_cascade_name in source code.\n"); return -1; };
 
 
-  cv::namedWindow(face_window_name,cv::WINDOW_NORMAL);
-  cv::moveWindow(face_window_name, 10, 100);
+  // cv::namedWindow(face_window_name,cv::WINDOW_NORMAL);
+  // cv::moveWindow(face_window_name, 10, 100);
   // cv::namedWindow("Sensitivity",cv::WINDOW_NORMAL);
 
   // cv::createTrackbar( "", "Sensitivity", &history.cutoff, 30, on_trackbar );
@@ -250,7 +250,7 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
 
   int res;
 
-  imshow(face_window_name, faceROI);
+  // imshow(face_window_name, faceROI);
   // rightPupil.x += face.x;
   // leftPupil.x += face.x;
   // rightPupil.y += face.y;
