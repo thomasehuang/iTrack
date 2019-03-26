@@ -4,6 +4,10 @@ Eye tracking for accessibility.
 
 ## Demo Videos
 
+[Browsing Reddit](https://drive.google.com/file/d/1jGc8VChGGwNRNNVF9BCtkZVZOSYnJPvi/view?usp=sharing)
+
+[Opening a video](https://drive.google.com/file/d/13hMo0tsL6tk6rKjOoj6xIxViYIFEgveX/view?usp=sharing)
+
 [Setup Tutorial](https://drive.google.com/open?id=1EwiEe1INtsU5r0KwHCujp7-T_bhfWiim)
 
 [Walkthrough Tutorial](https://drive.google.com/open?id=1CjY-SZ2-PhIgjgNnKxEUALwUfRLTiOza)
