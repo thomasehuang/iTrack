@@ -1,0 +1,4 @@
+left,Decrease Font,key,command,-
+right,Increase Font,key,command,+
+wright,Page Down,page_down
+wleft,Page Up,page_up

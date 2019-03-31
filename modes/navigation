@@ -1,0 +1,4 @@
+left,Back,key,command,left
+right,Enter,key,enter
+wright,Next,key,tab
+wleft,Previous,key,shift,tab

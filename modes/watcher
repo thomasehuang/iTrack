@@ -1,0 +1,4 @@
+left,Decrease Volume,key,up
+right,Increase Volume,key,down
+wright,Pause,key,space
+wleft,Fullscreen,key,f

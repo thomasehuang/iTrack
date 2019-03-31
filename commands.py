@@ -1,6 +1,7 @@
 import os
 # import os.path
 import socket
+import glob
 import pyautogui
 import threading
 import time
@@ -31,6 +32,7 @@ CMD2NAME = {
 }
 
 # Commmand functions
+
 def mouse_click():
     pyautogui.click()
 
@@ -117,31 +119,77 @@ class Mode:
     def execute(self,movement):
         self.commands[movement][0](*self.commands[movement][2])
 
-reader_mod = Mode("reader")
-reader_mod.set_command("left", "Decrease Font", pyautogui.hotkey,'command', '-')
-reader_mod.set_command("right", "Increase Font", pyautogui.hotkey,'command', '+')
-reader_mod.set_command("wright", "Page Down", page_down)
-reader_mod.set_command("wleft", "Page Up", page_up)
+# reader_mod = Mode("reader")
+# reader_mod.set_command("left", "Decrease Font", pyautogui.hotkey,'command', '-')
+# reader_mod.set_command("right", "Increase Font", pyautogui.hotkey,'command', '+')
+# reader_mod.set_command("wright", "Page Down", page_down)
+# reader_mod.set_command("wleft", "Page Up", page_up)
 
-web_mode = Mode("navigation")
-web_mode.set_command("left", "Back", pyautogui.hotkey,'command', 'left')
-web_mode.set_command("right", "Enter", pyautogui.hotkey,'enter')
-web_mode.set_command("wright", "Next", pyautogui.hotkey,'tab')
-web_mode.set_command("wleft", "Previous", pyautogui.hotkey,'shift', 'tab')
+# web_mode = Mode("nav")
+# web_mode.set_command("left", "Back", pyautogui.hotkey,'command', 'left')
+# web_mode.set_command("right", "Enter", pyautogui.hotkey,'enter')
+# web_mode.set_command("wright", "Next", pyautogui.hotkey,'tab')
+# web_mode.set_command("wleft", "Previous", pyautogui.hotkey,'shift', 'tab')
 
-watch_mod = Mode("watcher")
-watch_mod.set_command("left", "Decrease Volume", pyautogui.hotkey,'up')
-watch_mod.set_command("right", "Increase Volume", pyautogui.hotkey,'down')
-watch_mod.set_command("wright", "Pause", pyautogui.hotkey,'space')
-watch_mod.set_command("wleft", "Fullscreen", pyautogui.hotkey,'f')
+# watch_mod = Mode("watcher")
+# watch_mod.set_command("left", "Decrease Volume", pyautogui.hotkey,'up')
+# watch_mod.set_command("right", "Increase Volume", pyautogui.hotkey,'down')
+# watch_mod.set_command("wright", "Pause", pyautogui.hotkey,'space')
+# watch_mod.set_command("wleft", "Fullscreen", pyautogui.hotkey,'f')
 
-url_mode = Mode("url")
-url_mode.set_command("left", "Open Gmail", goto_url,'https://www.gmail.com/')
-url_mode.set_command("right", "Open Reddit", goto_url,'https://www.reddit.com/')
-url_mode.set_command("wright", "Open NY Times", goto_url,'https://www.nytimes.com/')
-url_mode.set_command("wleft", "Open Youtube", goto_url,'https://www.youtube.com/')
+# url_mode = Mode("url")
+# url_mode.set_command("left", "Open Gmail", goto_url,'https://www.gmail.com/')
+# url_mode.set_command("right", "Open Reddit", goto_url,'https://www.reddit.com/')
+# url_mode.set_command("wright", "Open NY Times", goto_url,'https://www.nytimes.com/')
+# url_mode.set_command("wleft", "Open Youtube", goto_url,'https://www.youtube.com/')
 
-modes = [url_mode, web_mode,reader_mod, watch_mod]
+modes = []
+files = glob.glob("modes/*")
+
+def add_mode_from_file(filename):
+    file = open(filename, "r")
+    mode_name = filename.split('/')[-1]
+    temp = Mode(mode_name)
+    for line in file:
+        line = line.strip('\n')
+        line = line.split(',')
+        if line[2] == 'url':
+            temp.set_command(line[0],line[1],goto_url,line[3])
+        elif line[2] == 'page_up':
+            temp.set_command(line[0],line[1],page_up)
+        elif line[2] == 'page_down':
+            temp.set_command(line[0],line[1],page_down)
+        elif line[2] == 'key':
+            temp.set_command(line[0],line[1],pyautogui.hotkey,*line[3:])
+    if mode_name == "url":
+        modes.insert(0,temp)
+    else:
+        modes.append(temp)
+
+def save_mode_to_file(mode):
+    file = open("modes/" + mode.name, "w")
+    for key in mode.commands:
+        val = mode.commands[key]
+        if val[0] == pyautogui.hotkey:
+            file.write(key + "," + val[1] + ",key," + str(val[2])[1:-1].replace(" ", "").replace("'", "") + "\n")
+        elif val[0] == page_up:
+            file.write(key + "," + val[1] + ",page_up," + "\n")
+        elif val[0] == page_down:
+            file.write(key + "," + val[1] + ",page_down," + "\n")
+        elif val[0] == goto_url:
+            file.write(key + "," + val[1] + ",url," + str(val[2])[1:-1].replace(" ", "").replace("'", "") + "\n")
+    file.close
+
+def delete_mode(position):
+    mode = modes[position]
+    os.remove("modes/" + mode.name)
+    del modes[position]
+
+
+
+for filename in files:
+    add_mode_from_file(filename)
+
 mode_pos = 0
 
 in_menu = False
