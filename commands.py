@@ -32,6 +32,9 @@ CMD2NAME = {
 }
 
 # Commmand functions
+socks = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+socks.bind(("localhost", 8123))
+socks.listen(5)
 
 def mouse_click():
     pyautogui.click()
@@ -70,14 +73,12 @@ def parse_commands(commands):
 def goto_url(url):
     os.system("open -a \"Google Chrome\" " + url)
 
-def help_window(window, name):
-    img = Image.open('res/NavMode.png')
-    if name == "reader":
-        img = Image.open('res/ReadMode.png')
-    elif name == "watcher":
-        img = Image.open('res/WatchMode.png')
-    elif name == "url":
-        img = Image.open('res/UrlMode.png')
+
+b = True
+
+
+def help_window(window, mode):
+    img = Image.open('res/helpMenu.png')
     w, h = img.size
     ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
 
@@ -97,9 +98,29 @@ def help_window(window, name):
 
     img = img.resize((new_w, new_h))
     img = ImageTk.PhotoImage(img)
-    canvas = Canvas(window, width=new_w, height=new_h)
-    canvas.pack()
-    canvas.create_image(0, 0, image=img, anchor=NW)
+    # canvas = Canvas(window, width=new_w, height=new_h)
+    # canvas.pack()
+    # canvas.create_image(0, 0, image=img, anchor=NW)
+    l=Label(window,image=img)
+    l.image=img       #just keeping a reference
+    l.grid()
+    label_name = Label(window, text=mode.name,width=10,anchor="w", font=("bold", 20))
+    label_name.place(x=new_w*.535,y=new_h*.225)
+    if "right" in mode.commands.keys():
+        label_right = Label(window, text=mode.commands["right"][1],width=15,anchor="w", font=("bold", 14))
+        label_right.place(x=new_w*.485,y=new_h*.41)
+
+    if "wright" in mode.commands.keys():
+        label_right = Label(window, text=mode.commands["wright"][1],width=15, anchor="w", font=("bold", 14))
+        label_right.place(x=new_w*.2,y=new_h*.41)
+
+    if "left" in mode.commands.keys():
+        label_right = Label(window, text=mode.commands["left"][1],width=15,anchor="w", font=("bold", 14))
+        label_right.place(x=new_w*.485,y=new_h*.59)
+        
+    if "wleft" in mode.commands.keys():
+        label_right = Label(window, text=mode.commands["wleft"][1],width=10, anchor="w", font=("bold", 14))
+        label_right.place(x=new_w*.2,y=new_h*.59)
 
     x = ws/2 - new_w/2
     y = hs/2 - new_h/2
@@ -192,6 +213,187 @@ for filename in files:
 
 mode_pos = 0
 
+def custom_window(window):
+    img = Image.open('res/customEditor.png')
+    w, h = img.size
+    ws, hs = window.winfo_screenwidth(), window.winfo_screenheight()
+
+    if float(h) / hs > 1.0 and float(h) / hs > float(w) / ws:
+        new_h = hs
+        new_w = int(w - (h - hs) * (w / h))
+    elif float(w) / ws > 1.0 and float(w) / ws > float(h) / hs:
+        new_h = int(h - (w - ws) * (h / w))
+        new_w = ws
+    else:
+        new_w, new_h = w, h
+
+    percent = .6
+    if percent < 1:
+        new_h = int(new_h * percent)
+        new_w = int(new_w * percent)
+
+    img = img.resize((new_w, new_h))
+    img = ImageTk.PhotoImage(img)
+
+    l=Label(window,image=img)
+    l.image=img
+    l.grid()
+
+    name=StringVar()
+    entry_name = Entry(window,textvariable=name)
+    entry_name.place(x=new_w*.58,y=new_h*.2)
+
+    list1 = ['key', 'url'];
+
+
+    wright_type=StringVar()
+    wright_droplist=OptionMenu(window,wright_type, *list1)
+    wright_droplist.config(width=6)
+    wright_type.set('Type') 
+    wright_droplist.place(x=new_w*.15,y=new_h*.41)
+    wright_args =StringVar()
+    wright_args.set('Enter Command') 
+    entry_wright = Entry(window,textvariable=wright_args,width =13)
+    entry_wright.place(x=new_w*.25,y=new_h*.41)
+    wright_name =StringVar()
+    wright_name.set('Enter Command Name') 
+    entry_wright_name = Entry(window,textvariable=wright_name)
+    entry_wright_name.place(x=new_w*.17,y=new_h*.48)
+
+
+    right_type=StringVar()
+    right_droplist=OptionMenu(window,right_type, *list1)
+    right_droplist.config(width=6)
+    right_type.set('Type') 
+    right_droplist.place(x=new_w*.465,y=new_h*.41)
+    right_args =StringVar()
+    right_args.set('Enter Command') 
+    entry_right = Entry(window,textvariable=right_args,width =13)
+    entry_right.place(x=new_w*.565,y=new_h*.41)
+    right_name =StringVar()
+    right_name.set('Enter Command Name') 
+    entry_right_name = Entry(window,textvariable=right_name)
+    entry_right_name.place(x=new_w*.485,y=new_h*.48)
+
+
+    wleft_type=StringVar()
+    wleft_droplist=OptionMenu(window,wleft_type, *list1)
+    wleft_droplist.config(width=6)
+    wleft_type.set('Type') 
+    wleft_droplist.place(x=new_w*.15,y=new_h*.67)
+    wleft_args =StringVar()
+    wleft_args.set('Enter Command') 
+    entry_wleft = Entry(window,textvariable=wleft_args,width =13)
+    entry_wleft.place(x=new_w*.25,y=new_h*.67)
+    wleft_name =StringVar()
+    wleft_name.set('Enter Command Name') 
+    entry_wleft_name = Entry(window,textvariable=wleft_name)
+    entry_wleft_name.place(x=new_w*.17,y=new_h*.74)
+
+
+    left_type=StringVar()
+    left_droplist=OptionMenu(window,left_type, *list1)
+    left_droplist.config(width=6)
+    left_type.set('Type') 
+    left_droplist.place(x=new_w*.465,y=new_h*.67)
+    left_args =StringVar()
+    left_args.set('Enter Command') 
+    entry_left = Entry(window,textvariable=left_args,width =13)
+    entry_left.place(x=new_w*.565,y=new_h*.67)
+    left_name =StringVar()
+    left_name.set('Enter Command Name') 
+    entry_left_name = Entry(window,textvariable=left_name)
+    entry_left_name.place(x=new_w*.485,y=new_h*.74)
+
+    global b
+    b = True
+    
+    def callback():
+        global b
+        b = False
+        window.destroy()
+        new_mode = Mode(name.get())
+        if wright_type.get() == "url":
+            new_mode.set_command("wright", wright_name.get(), goto_url,wright_args.get())
+        elif wright_type.get() == "key":
+            line = wright_args.get()
+            line = line.split(',')
+            new_mode.set_command("wright", wright_name.get(),pyautogui.hotkey,*line)
+
+        if right_type.get() == "url":
+            new_mode.set_command("right", right_name.get(), goto_url,right_args.get())
+        elif right_type.get() == "key":
+            line = right_args.get()
+            line = line.split(',')
+            new_mode.set_command("right", right_name.get(),pyautogui.hotkey,*line)
+
+        if wleft_type.get() == "url":
+            new_mode.set_command("wleft", wleft_name.get(), goto_url,wleft_args.get())
+        elif wleft_type.get() == "key":
+            line = wleft_args.get()
+            line = line.split(',')
+            new_mode.set_command("wleft", wleft_name.get(),pyautogui.hotkey,*line)
+
+        if left_type.get() == "url":
+            new_mode.set_command("left", left_name.get(), goto_url,left_args.get())
+        elif left_type.get() == "key":
+            line = left_args.get()
+            line = line.split(',')
+            new_mode.set_command("left", left_name.get(),pyautogui.hotkey,*line)
+        modes.append(new_mode)
+        save_mode_to_file(new_mode)
+        global mode_pos
+        mode_pos = len(modes) - 1
+
+
+    def callbackexit():
+        global b
+        b = False
+        window.destroy()
+
+
+    Button(window, text='Exit',width=10,bg='brown',fg='white',command=callbackexit).place(x=new_w*.5,y=new_h*.825)
+    Button(window, text='Save',width=10,bg='brown',fg='white',command=callback).place(x=new_w*.3,y=new_h*.825)
+
+
+    x = ws/2 - new_w/2
+    y = hs/2 - new_h/2
+
+    window.geometry("+%d+%d" % (x, y))
+
+    def testsss():
+        while True:
+            client = socks.accept()[0]
+            message = client.recv(1024)
+            client.send(str("recieved").encode("utf-8"))
+            command = message.decode('ascii')
+            global b
+            if b == False:
+                client.close()
+                return
+            if command == "up":
+                b = False
+                client.close()
+                return
+            client.close()
+
+    download_thread = threading.Thread(target=testsss)
+    download_thread.start()
+
+    while b:
+        window.update_idletasks()
+        window.update()
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    host ="localhost"
+    port =8123
+    s.connect((host,port))
+    s.send('e'.encode()) 
+
+
+
+
+
 in_menu = False
 if __name__ == '__main__':
     # For visualization
@@ -204,10 +406,6 @@ if __name__ == '__main__':
 
     root = Tk()
     root.withdraw()
-
-    socks = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    socks.bind(("localhost", 8123))
-    socks.listen(5)
     while True:
         client = socks.accept()[0]
         message = client.recv(1024)
@@ -234,7 +432,7 @@ if __name__ == '__main__':
                     menu = Toplevel(root)
                     menu.title('Help Menu')
                     menu.attributes("-topmost", True)
-                    img = help_window(menu, modes[mode_pos].name)
+                    img = help_window(menu, modes[mode_pos])
             elif command == 'right':
                 if pause:
                     c = 'Locked'
@@ -246,7 +444,7 @@ if __name__ == '__main__':
                     menu = Toplevel(root)
                     menu.title('Help Menu')
                     menu.attributes("-topmost", True)
-                    img = help_window(menu, modes[mode_pos].name)
+                    img = help_window(menu, modes[mode_pos])
             elif command == 'up':
                 in_menu = False
                 c = "Close Menu"
@@ -258,6 +456,17 @@ if __name__ == '__main__':
                     c = "Lock"
                 else:
                     c = "Unlock"
+            elif command == 'wright':
+                menu.destroy()
+                menu = Toplevel(root)
+                menu.title('Help Menu')
+                menu.attributes("-topmost", True)
+                img = custom_window(menu)
+                menu.destroy()
+                menu = Toplevel(root)
+                menu.title('Help Menu')
+                menu.attributes("-topmost", True)
+                img = help_window(menu, modes[mode_pos])
         elif command in modes[mode_pos].commands:
             if setup:
                 continue
@@ -272,7 +481,7 @@ if __name__ == '__main__':
             menu = Toplevel(root)
             menu.title('Help Menu')
             menu.attributes("-topmost", True)
-            img = help_window(menu, modes[mode_pos].name)
+            img = help_window(menu, modes[mode_pos])
             if setup_window != None:
                 setup_window.destroy()
                 setup_window = None
