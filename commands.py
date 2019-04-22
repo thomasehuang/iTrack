@@ -8,6 +8,8 @@ import time
 from tkinter import *
 from PIL import ImageTk, Image
 from AppKit import NSSound
+from gtts import gTTS
+import argparse
 
 """
 Commands:
@@ -31,6 +33,9 @@ CMD2NAME = {
     'ss': 'Screenshot',
 }
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-v', dest='v',  default=False, action='store_true')
+options = parser.parse_args()
 # Commmand functions
 socks = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socks.bind(("localhost", 8123))
@@ -512,6 +517,12 @@ if __name__ == '__main__':
 
         if viz:
             if c != "":
+                if options.v:
+                    mp3 = gTTS(text=c,lang='en',slow=False)
+                    mp3.save("temp.mp3")
+                    os.system("afplay temp.mp3")
+                    os.system("rm temp.mp3")
+
                 window = Toplevel(root)
                 window.title('Executed Command')
                 window.attributes("-topmost", True)
