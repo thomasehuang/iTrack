@@ -41,6 +41,11 @@ socks = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socks.bind(("localhost", 8123))
 socks.listen(5)
 
+def text_to_voice(text):
+    mp3 = gTTS(text=text,lang='en',slow=False)
+    mp3.save("temp.mp3")
+    os.system("afplay temp.mp3")
+    os.system("rm temp.mp3")
 def mouse_click():
     pyautogui.click()
 
@@ -518,10 +523,9 @@ if __name__ == '__main__':
         if viz:
             if c != "":
                 if options.v:
-                    mp3 = gTTS(text=c,lang='en',slow=False)
-                    mp3.save("temp.mp3")
-                    os.system("afplay temp.mp3")
-                    os.system("rm temp.mp3")
+                    download_thread = threading.Thread(target=text_to_voice, args=[c])
+                    download_thread.start()
+
 
                 window = Toplevel(root)
                 window.title('Executed Command')
