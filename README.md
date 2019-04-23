@@ -109,7 +109,7 @@ We support modes, which allow you to have different mappings from the actions (l
 | **Watcher** | Decrease Volume | Increase Volume | Fullscreen | Pause | Works best with YouTube. |
 | **URL** | Open Reddit | Open Gmail | Open Youtube | Open NY Times | |
 
-Users can also make there own custom modes with custom commands. To enter the custom mode creater execute a right wink command while in the help menu.
+Users can also make their own custom modes with custom commands. To enter the custom mode creater, execute a right wink command while in the help menu.
 
 ## Troubleshooting
 
