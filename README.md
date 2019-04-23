@@ -79,6 +79,7 @@ To start up front end code:
 ```
 python commands.py
 ```
+* Note: Running commands.py with -v will enable the "voice" feature, this feature will speak all commands that get executed. 
 
 After both files are running, you should be able to use your eye movements to control your computer.
 
