@@ -114,23 +114,28 @@ def help_window(window, mode):
     l=Label(window,image=img)
     l.image=img       #just keeping a reference
     l.grid()
-    label_name = Label(window, text=mode.name,width=10,anchor="w", font=("bold", 20))
+    label_name = Label(window, text=mode.name, width=10, anchor="w",
+        font=("bold", 20))
     label_name.place(x=new_w*.535,y=new_h*.225)
     if "right" in mode.commands.keys():
-        label_right = Label(window, text=mode.commands["right"][1],width=15,anchor="w", font=("bold", 14))
-        label_right.place(x=new_w*.485,y=new_h*.41)
+        label_right = Label(window, text=mode.commands["right"][1],
+            width=15, anchor="w", font=("bold", 14))
+        label_right.place(x=new_w*.485, y=new_h*.41)
 
     if "wright" in mode.commands.keys():
-        label_right = Label(window, text=mode.commands["wright"][1],width=15, anchor="w", font=("bold", 14))
-        label_right.place(x=new_w*.2,y=new_h*.41)
+        label_right = Label(window, text=mode.commands["wright"][1],
+            width=15, anchor="w", font=("bold", 14))
+        label_right.place(x=new_w*.2, y=new_h*.41)
 
     if "left" in mode.commands.keys():
-        label_right = Label(window, text=mode.commands["left"][1],width=15,anchor="w", font=("bold", 14))
-        label_right.place(x=new_w*.485,y=new_h*.59)
+        label_right = Label(window, text=mode.commands["left"][1],
+            width=15, anchor="w", font=("bold", 14))
+        label_right.place(x=new_w*.485, y=new_h*.59)
         
     if "wleft" in mode.commands.keys():
-        label_right = Label(window, text=mode.commands["wleft"][1],width=10, anchor="w", font=("bold", 14))
-        label_right.place(x=new_w*.2,y=new_h*.59)
+        label_right = Label(window, text=mode.commands["wleft"][1],
+            width=10, anchor="w", font=("bold", 14))
+        label_right.place(x=new_w*.2, y=new_h*.59)
 
     x = ws/2 - new_w/2
     y = hs/2 - new_h/2
@@ -149,30 +154,6 @@ class Mode:
 
     def execute(self,movement):
         self.commands[movement][0](*self.commands[movement][2])
-
-# reader_mod = Mode("reader")
-# reader_mod.set_command("left", "Decrease Font", pyautogui.hotkey,'command', '-')
-# reader_mod.set_command("right", "Increase Font", pyautogui.hotkey,'command', '+')
-# reader_mod.set_command("wright", "Page Down", page_down)
-# reader_mod.set_command("wleft", "Page Up", page_up)
-
-# web_mode = Mode("nav")
-# web_mode.set_command("left", "Back", pyautogui.hotkey,'command', 'left')
-# web_mode.set_command("right", "Enter", pyautogui.hotkey,'enter')
-# web_mode.set_command("wright", "Next", pyautogui.hotkey,'tab')
-# web_mode.set_command("wleft", "Previous", pyautogui.hotkey,'shift', 'tab')
-
-# watch_mod = Mode("watcher")
-# watch_mod.set_command("left", "Decrease Volume", pyautogui.hotkey,'up')
-# watch_mod.set_command("right", "Increase Volume", pyautogui.hotkey,'down')
-# watch_mod.set_command("wright", "Pause", pyautogui.hotkey,'space')
-# watch_mod.set_command("wleft", "Fullscreen", pyautogui.hotkey,'f')
-
-# url_mode = Mode("url")
-# url_mode.set_command("left", "Open Gmail", goto_url,'https://www.gmail.com/')
-# url_mode.set_command("right", "Open Reddit", goto_url,'https://www.reddit.com/')
-# url_mode.set_command("wright", "Open NY Times", goto_url,'https://www.nytimes.com/')
-# url_mode.set_command("wleft", "Open Youtube", goto_url,'https://www.youtube.com/')
 
 modes = []
 files = glob.glob("modes/*")
@@ -202,13 +183,15 @@ def save_mode_to_file(mode):
     for key in mode.commands:
         val = mode.commands[key]
         if val[0] == pyautogui.hotkey:
-            file.write(key + "," + val[1] + ",key," + str(val[2])[1:-1].replace(" ", "").replace("'", "") + "\n")
+            file.write(key + "," + val[1] + ",key," + str(val[2])[1:-1].replace(
+                " ", "").replace("'", "") + "\n")
         elif val[0] == page_up:
             file.write(key + "," + val[1] + ",page_up," + "\n")
         elif val[0] == page_down:
             file.write(key + "," + val[1] + ",page_down," + "\n")
         elif val[0] == goto_url:
-            file.write(key + "," + val[1] + ",url," + str(val[2])[1:-1].replace(" ", "").replace("'", "") + "\n")
+            file.write(key + "," + val[1] + ",url," + str(val[2])[1:-1].replace(
+                " ", "").replace("'", "") + "\n")
     file.close
 
 def delete_mode(position):
@@ -324,32 +307,40 @@ def custom_window(window):
         window.destroy()
         new_mode = Mode(name.get())
         if wright_type.get() == "url":
-            new_mode.set_command("wright", wright_name.get(), goto_url,wright_args.get())
+            new_mode.set_command("wright", wright_name.get(),
+                goto_url,wright_args.get())
         elif wright_type.get() == "key":
             line = wright_args.get()
             line = line.split(',')
-            new_mode.set_command("wright", wright_name.get(),pyautogui.hotkey,*line)
+            new_mode.set_command("wright", wright_name.get(),
+                pyautogui.hotkey, *line)
 
         if right_type.get() == "url":
-            new_mode.set_command("right", right_name.get(), goto_url,right_args.get())
+            new_mode.set_command("right", right_name.get(),
+                goto_url, right_args.get())
         elif right_type.get() == "key":
             line = right_args.get()
             line = line.split(',')
-            new_mode.set_command("right", right_name.get(),pyautogui.hotkey,*line)
+            new_mode.set_command("right", right_name.get(),
+                pyautogui.hotkey, *line)
 
         if wleft_type.get() == "url":
-            new_mode.set_command("wleft", wleft_name.get(), goto_url,wleft_args.get())
+            new_mode.set_command("wleft", wleft_name.get(),
+                goto_url,wleft_args.get())
         elif wleft_type.get() == "key":
             line = wleft_args.get()
             line = line.split(',')
-            new_mode.set_command("wleft", wleft_name.get(),pyautogui.hotkey,*line)
+            new_mode.set_command("wleft", wleft_name.get(),
+                pyautogui.hotkey, *line)
 
         if left_type.get() == "url":
-            new_mode.set_command("left", left_name.get(), goto_url,left_args.get())
+            new_mode.set_command("left", left_name.get(), goto_url,
+                left_args.get())
         elif left_type.get() == "key":
             line = left_args.get()
             line = line.split(',')
-            new_mode.set_command("left", left_name.get(),pyautogui.hotkey,*line)
+            new_mode.set_command("left", left_name.get(),
+                pyautogui.hotkey, *line)
         modes.append(new_mode)
         save_mode_to_file(new_mode)
         global mode_pos
@@ -362,8 +353,10 @@ def custom_window(window):
         window.destroy()
 
 
-    Button(window, text='Exit',width=10,bg='brown',fg='white',command=callbackexit).place(x=new_w*.5,y=new_h*.825)
-    Button(window, text='Save',width=10,bg='brown',fg='white',command=callback).place(x=new_w*.3,y=new_h*.825)
+    Button(window, text='Exit', width=10, bg='brown', fg='white',
+        command=callbackexit).place(x=new_w*.5, y=new_h*.825)
+    Button(window, text='Save', width=10, bg='brown', fg='white',
+        command=callback).place(x=new_w*.3, y=new_h*.825)
 
 
     x = ws/2 - new_w/2
@@ -423,7 +416,8 @@ if __name__ == '__main__':
         command = message.decode('ascii')
         sound = NSSound.alloc()
 
-        sound.initWithContentsOfFile_byReference_('/System/Library/Sounds/Ping.aiff', True)
+        sound.initWithContentsOfFile_byReference_(
+            '/System/Library/Sounds/Ping.aiff', True)
         #rewind and play whenever you need it:
         sound.stop() #rewind
         sound.play()
@@ -504,10 +498,13 @@ if __name__ == '__main__':
             setup_window.title('Setup Window')
             setup_window.attributes("-topmost", True)
             w, h = 800, 300
-            ws, hs = setup_window.winfo_screenwidth(), setup_window.winfo_screenheight()
-            setup_window.geometry('%ix%i+%i+%i' % (w,h,ws//2 - w//2,hs//2 - h//2))
+            ws, hs = setup_window.winfo_screenwidth(), \
+                setup_window.winfo_screenheight()
+            setup_window.geometry('%ix%i+%i+%i' % (
+                w,h,ws//2 - w//2,hs//2 - h//2))
 
-            lbl = Label(setup_window, text=command[6:], font=("Arial", 30), wraplength=750)
+            lbl = Label(setup_window, text=command[6:], font=("Arial", 30),
+                wraplength=750)
             lbl.grid(column=0, row=0)
             setup_window.columnconfigure(0, weight=1)
             setup_window.rowconfigure(0, weight=1)
@@ -518,14 +515,12 @@ if __name__ == '__main__':
                 setup_window = None
             setup = True
 
-
-
         if viz:
             if c != "":
                 if options.v:
-                    download_thread = threading.Thread(target=text_to_voice, args=[c])
+                    download_thread = threading.Thread(target=text_to_voice,
+                        args=[c])
                     download_thread.start()
-
 
                 window = Toplevel(root)
                 window.title('Executed Command')
